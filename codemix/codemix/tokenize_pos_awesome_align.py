@@ -7,17 +7,30 @@ tqdm.pandas()
 import stanza
 
 # downloading stanza models for indian languages & english
-for i in ["en", "hi", "mr", "ta", "te"]:
-    stanza.download(i)
+# for i in ["en", "hi", "mr", "ta", "te"]:
+#     stanza.download(i)
 
 cwd = os.getcwd()
 
 # TOKENIZE-POS CODE
 
-# setting up awesome-align aligner
-from .align_util import awesomealign
+# setting up aligners
+from .align_util import awesomealign, statisticalign
 
-aligner = awesomealign(modelpath = 'bert-base-multilingual-cased',
+directory = os.path.join(cwd, "codemix", "stat_align_utils")
+fwd_params = os.path.join(directory, "fwd_params")
+fwd_err = os.path.join(directory, "fwd_err")
+rev_params = os.path.join(directory, "rev_params")
+rev_err = os.path.join(directory, "rev_err")
+heuristic = 'grow-diag-final-and'
+
+statistical_aligner = statisticalign(fwd_params = fwd_params,
+                                     fwd_err = fwd_err,
+                                     rev_params = rev_params,
+                                     rev_err = rev_err,
+                                     heuristic = heuristic)
+
+awesome_aligner = awesomealign(modelpath = 'bert-base-multilingual-cased',
                       tokenizerpath = 'bert-base-multilingual-cased')  
 
 # setting up stanza pipelines
@@ -59,7 +72,20 @@ def create_alignments_token_map(sent_src, sent_tgt, alignments):
 
 # getting alignments and token map
 def get_alignment_token_map(en_sent, hi_sent):
-    alignments = aligner.get_alignments_sentence_pair(en_sent, hi_sent)
+    #option between awesomealign and statisticalign?
+    ch = 0
+    while True:
+        ch = int(input("Enter 1 for awesomealign, 2 for statisticalign: "))
+        if ch in [1, 2]:
+            break
+        else:
+            print("Enter valid choice")
+
+    if ch == 1:
+        alignments = awesome_aligner.get_alignments_sentence_pair(en_sent, hi_sent)
+    elif ch == 2:
+        line = f"{en_sent} ||| {hi_sent}"
+        alignments = statistical_aligner.align(line.strip())
     token_alignment_map = create_alignments_token_map(en_sent, hi_sent, alignments)
     return alignments, token_alignment_map
 
