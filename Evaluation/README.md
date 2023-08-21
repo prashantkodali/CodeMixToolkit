@@ -1,0 +1,5 @@
+- LID modification for Devnagari
+- Handling NER or POS token tagging(One word getting segmented to multiple tokens leading to each chunk having different tag) 
+- Sentence Embedding comparison for Devnagari and Roman Sentences. (Same Embeddings should be same for same sentences even when written in different Script).
+- Not all evaluations ran in GLUECoS for XLMR
+- Code for Sentiment Analysis (Hinglish). 
