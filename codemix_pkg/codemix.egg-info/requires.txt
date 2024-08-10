@@ -1,0 +1,6 @@
+statistics
+streamlit
+htbuilder
+IPython
+st-annotated-text
+stanza
