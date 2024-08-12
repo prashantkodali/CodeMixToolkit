@@ -1,6 +1,6 @@
 from torch.utils.data import DataLoader
 # from minicons import scorer
-from cs_metrics import CodeMixSentence, SyMCoM, CodeMixMetrics
+from codemix.cs_metrics import CodeMixSentence, SyMCoM, CodeMixMetrics
 import torch
 from transformers import (
     AutoModelForTokenClassification,
