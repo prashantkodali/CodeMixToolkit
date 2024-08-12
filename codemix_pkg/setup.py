@@ -13,6 +13,9 @@ setup(
         'htbuilder',
         'IPython',
         'st-annotated-text',
-        'stanza'
+        'stanza',
+        'indic-nlp-library',
+        'transformers',
+        'datasets'
     ],
 )
