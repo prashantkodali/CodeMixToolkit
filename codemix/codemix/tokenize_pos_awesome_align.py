@@ -7,8 +7,12 @@ tqdm.pandas()
 import stanza
 
 # downloading stanza models for indian languages & english
-for i in ["en", "hi", "mr", "ta", "te"]:
+# for i in ["en", "hi", "mr", "ta", "te"]:
+#     stanza.download(i)
+
+for i in ["en", "hi"]:
     stanza.download(i)
+
 
 cwd = os.getcwd()
 

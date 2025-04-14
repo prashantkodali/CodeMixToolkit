@@ -20,7 +20,7 @@
                 "INTJ",
                 "PUNCT",
                 "ADV",
-                "ADJ",
+                "ADV",
                 "AUX",
                 "PRON",
                 "VERB",
@@ -47,7 +47,7 @@
                 "PUNCT",
                 "PRON",
                 "NOUN",
-                "PRON",
+                "DET",
                 "AUX",
                 "PUNCT"
             ]
