@@ -1,1 +1,5 @@
 .ipynb_checkpoints
+Running_notes_prakod.md
+__pycache__/
+*.py[cod]
+*.egg-info/
