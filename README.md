@@ -5,8 +5,6 @@ Install Instructions:
 1. Download the dist directory
 2. Do pip install 'location of dist'
 3. You can import codemix in your code now
-<<<<<<< HEAD
-=======
 
 ### Recommended
 - Run the toolkit in an Anaconda environment.
@@ -54,4 +52,3 @@ jupyter notebook --ip 0.0.0.0 --port 5000 --no-browser --allow-root
  >>> flask run -h 0.0.0.0 -p 6000
  ```
 - (change port and host details as required)
->>>>>>> d3f9b6f1c18af985471d67d8ed2a2109dce2a082

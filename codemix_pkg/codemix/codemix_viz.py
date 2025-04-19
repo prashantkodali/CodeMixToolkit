@@ -31,7 +31,8 @@ class AnnotatedTextPrinter:
             "ml": "#f00",
             "ne": "#8ef",
             "acro": "#fea",
-            "univ": "#c39"}
+            "univ": "#c39",
+        }
 
     def print_sample_st_annot_text(self, sample_text, sample_langspan, sample_posspan):
         if not isinstance(sample_text, list):
@@ -56,5 +57,49 @@ class AnnotatedTextPrinter:
             else:
                 raise Exception("Oh noes!")
 
+        # display(HTML('<hr>'))
+        # display(HTML(str(out)))
+        # display(HTML('<hr>'))
+
+        # Create the HTML string
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>CodeMix Visualization</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                    padding: 20px;
+                }}
+                .token {{
+                    display: inline-flex;
+                    flex-direction: row;
+                    align-items: center;
+                    border-radius: 0.5rem;
+                    padding: 0.25rem 0.5rem;
+                    margin: 0.1rem;
+                }}
+                .token-info {{
+                    font-size: 0.75rem;
+                    opacity: 0.5;
+                    margin-left: 0.5rem;
+                }}
+            </style>
+        </head>
+        <body>
+            {str(out)}
+        </body>
+        </html>
+        """
+
+        # Save to file
+        with open("codemix_visualization.html", "w", encoding="utf-8") as f:
+            f.write(html_content)
+            print("HTML file saved as codemix_visualization.html")
+
+        # Display in notebook (if running in notebook)
+        display(HTML("<hr>"))
         display(HTML(str(out)))
-        display(HTML('<hr>'))
+        display(HTML("<hr>"))
