@@ -3,14 +3,37 @@ import re
 import torch
 import transformers
 import itertools
+from tqdm import tqdm
+from typing import List, Set, Tuple, Iterable
 
 
 class awesomealign:
-    def __init__(self, modelpath, tokenizerpath):
+    """A class for performing word alignment between source and target sentences using AwesomeAlign model.
+    
+    This class uses BERT-based models to compute word alignments between pairs of sentences.
+    It supports both single sentence pair alignment and batch processing of multiple sentence pairs.
+    """
+    
+    def __init__(self, modelpath: str, tokenizerpath: str) -> None:
+        """Initialize the AwesomeAlign model and tokenizer.
+        
+        Args:
+            modelpath (str): Path to the pre-trained BERT model
+            tokenizerpath (str): Path to the BERT tokenizer
+        """
         self.model = transformers.BertModel.from_pretrained(modelpath)
         self.tokenizer = transformers.BertTokenizer.from_pretrained(tokenizerpath)
 
-    def get_alignments_sentence_pair(self, src, tgt):
+    def get_alignments_sentence_pair(self, src: str, tgt: str) -> str:
+        """Get word alignments between a source and target sentence pair.
+        
+        Args:
+            src (str): Source sentence
+            tgt (str): Target sentence
+            
+        Returns:
+            str: Space-separated string of word alignments in the format "src_idx-tgt_idx"
+        """
         sent_src, sent_tgt = src.strip().split(), tgt.strip().split()
         token_src, token_tgt = (
             [self.tokenizer.tokenize(word) for word in sent_src],
@@ -61,7 +84,7 @@ class awesomealign:
             softmax_inter = (softmax_srctgt > threshold) * (softmax_tgtsrc > threshold)
 
         align_subwords = torch.nonzero(softmax_inter, as_tuple=False)
-        align_words = set()
+        align_words: Set[Tuple[int, int]] = set()
         for i, j in align_subwords:
             align_words.add((sub2word_map_src[i], sub2word_map_tgt[j]))
 
@@ -71,8 +94,17 @@ class awesomealign:
 
         return st
 
-    def get_alignments_iter(self, src_iterable, tgt_iterable):
-        align_words_align = []
+    def get_alignments_iter(self, src_iterable: Iterable[str], tgt_iterable: Iterable[str]) -> List[str]:
+        """Get word alignments for multiple sentence pairs.
+        
+        Args:
+            src_iterable (Iterable[str]): Iterable of source sentences
+            tgt_iterable (Iterable[str]): Iterable of target sentences
+            
+        Returns:
+            List[str]: List of alignment strings for each sentence pair
+        """
+        align_words_align: List[str] = []
         for src, tgt in tqdm(zip(src_iterable, tgt_iterable)):
             align_words = self.get_alignments_sentence_pair(src, tgt)
             align_words_align.append(align_words)

@@ -8,20 +8,50 @@ from collections import Counter
 import math
 from statistics import stdev, mean
 from statistics import StatisticsError
+from typing import List, Dict, Optional, Union, Any
 
 
 class CodeMixSentence:
+    """A class representing a code-mixed sentence with various metrics.
+    
+    This class provides functionality to compute various code-mixing metrics
+    such as CMI (Code-Mixing Index), burstiness, I-index, language entropy,
+    M-index, SPavg, and SyMCoM scores.
+    
+    Attributes:
+        lang_tagset: List of language tags to consider
+        other_tagset: List of other tags to consider
+        l1: Primary language code
+        l2: Secondary language code
+        sentence: Original sentence text
+        tokens: List of tokens in the sentence
+        LID_Tags: Language identification tags
+        PoS_Tags: Part-of-speech tags
+    """
+    
     def __init__(
         self,
-        lang_tagset=None,
-        other_tagset=None,
-        l1=None,
-        l2=None,
-        sentence=None,
-        tokens=None,
-        LID_Tags=None,
-        PoS_Tags=None,
-    ):
+        lang_tagset: Optional[List[str]] = None,
+        other_tagset: Optional[List[str]] = None,
+        l1: Optional[str] = None,
+        l2: Optional[str] = None,
+        sentence: Optional[str] = None,
+        tokens: Optional[List[str]] = None,
+        LID_Tags: Optional[List[str]] = None,
+        PoS_Tags: Optional[List[str]] = None,
+    ) -> None:
+        """Initialize a CodeMixSentence object.
+        
+        Args:
+            lang_tagset: List of language tags to consider
+            other_tagset: List of other tags to consider
+            l1: Primary language code
+            l2: Secondary language code
+            sentence: Original sentence text
+            tokens: List of tokens in the sentence
+            LID_Tags: Language identification tags
+            PoS_Tags: Part-of-speech tags
+        """
         self.lang_tagset = lang_tagset
         self.other_tagset = other_tagset
 
@@ -46,16 +76,16 @@ class CodeMixSentence:
             self.LID_POS_count_map = dict(Counter(lid_pos_combined).most_common())
 
         self.length = len(LID_Tags)
-        self.cmi = None
-        self.burstiness = None
-        self.i_index = None
-        self.lang_entropy = None
-        self.mindex = None
-        self.spavg = None
-        self.symcom_sentence = None
+        self.cmi: Optional[float] = None
+        self.burstiness: Optional[float] = None
+        self.i_index: Optional[float] = None
+        self.lang_entropy: Optional[float] = None
+        self.mindex: Optional[float] = None
+        self.spavg: Optional[float] = None
+        self.symcom_sentence: Optional[float] = None
 
-    def __repr__(self):
-        # Create a concise representation of the object
+    def __repr__(self) -> str:
+        """Return a string representation of the CodeMixSentence object."""
         return (
             f"CodeMixSentenceCombined(\n"
             f"    lang_tagset={self.lang_tagset},\n"
@@ -77,7 +107,8 @@ class CodeMixSentence:
             f")"
         )
 
-    def compute_all_metrics(self):
+    def compute_all_metrics(self) -> None:
+        """Compute all available metrics for the code-mixed sentence."""
         self.cmi = self.compute_cmi()
         self.burstiness = self.compute_burstiness()
         self.i_index = self.compute_i_index()
@@ -86,14 +117,26 @@ class CodeMixSentence:
         self.spavg = self.compute_spavg()
         self.symcom_sentence = self.compute_symcom_sentence()
 
-    def _preprocess_LID_Tags(self):
+    def _preprocess_LID_Tags(self) -> List[str]:
+        """Preprocess language identification tags.
+        
+        Returns:
+            List of processed language identification tags.
+        """
         x = self.LID_Tags
         if isinstance(x, str):
             x = x.split()
         x = [i for i in x if i in self.lang_tagset]
         return x
 
-    def compute_cmi(self):
+    def compute_cmi(self) -> Optional[float]:
+        """Compute the Code-Mixing Index (CMI).
+        
+        CMI measures the degree of code-mixing in a sentence.
+        
+        Returns:
+            CMI value between 0 and 100, or None if computation fails.
+        """
         x = self.LID_Tags
         try:
             c = Counter(x)
@@ -114,7 +157,15 @@ class CodeMixSentence:
             print("Error in cmi")
             return None
 
-    def compute_mindex(self, k=2):
+    def compute_mindex(self, k: int = 2) -> float:
+        """Compute the M-index, a measure of language diversity.
+        
+        Args:
+            k: Number of languages (default: 2)
+            
+        Returns:
+            M-index value
+        """
         x = self.LID_Tags
 
         c = Counter(x)
@@ -122,7 +173,15 @@ class CodeMixSentence:
         term = sum([(v / total) ** 2 for k, v in c.items() if k in self.lang_tagset])
         return (1 - term) / ((k - 1) * term)
 
-    def compute_lang_entropy(self, k=2):
+    def compute_lang_entropy(self, k: int = 2) -> float:
+        """Compute the language entropy of the sentence.
+        
+        Args:
+            k: Number of languages (default: 2)
+            
+        Returns:
+            Language entropy value
+        """
         x = self.LID_Tags
 
         c = Counter(x)
@@ -131,7 +190,15 @@ class CodeMixSentence:
         result = sum([(i * math.log2(i)) for i in terms])
         return -result
 
-    def compute_spavg(self, _=2):
+    def compute_spavg(self, _: int = 2) -> Optional[float]:
+        """Compute the average number of switches per word.
+        
+        Args:
+            _: Unused parameter (kept for compatibility)
+            
+        Returns:
+            Average number of switches per word, or None if computation fails
+        """
         x = self.LID_Tags
         try:
             x = [el.lower() for el in x]
@@ -149,7 +216,15 @@ class CodeMixSentence:
         except TypeError:
             return None
 
-    def compute_i_index(self, k=2):
+    def compute_i_index(self, k: int = 2) -> float:
+        """Compute the I-index, a measure of language alternation.
+        
+        Args:
+            k: Number of languages (default: 2)
+            
+        Returns:
+            I-index value
+        """
         x = self.LID_Tags
         x = [el.lower() for el in x]
 
@@ -163,7 +238,12 @@ class CodeMixSentence:
 
         return count / (len(x) - 1)
 
-    def compute_burstiness(self):
+    def compute_burstiness(self) -> Optional[float]:
+        """Compute the burstiness of language switches.
+        
+        Returns:
+            Burstiness value between -1 and 1, or None if computation fails
+        """
         x = self.LID_Tags
         try:
             x = list(filter(lambda a: a not in self.other_tagset, x))
@@ -187,7 +267,12 @@ class CodeMixSentence:
         except TypeError:
             return None
 
-    def compute_symcom_pos_tags(self):
+    def compute_symcom_pos_tags(self) -> Dict[str, float]:
+        """Compute SyMCoM scores for each part-of-speech tag.
+        
+        Returns:
+            Dictionary mapping POS tags to their SyMCoM scores
+        """
         symcom_scores_pos_tags = {}
 
         for postag in self.PoS_count_map:
@@ -204,7 +289,12 @@ class CodeMixSentence:
 
         return symcom_scores_pos_tags
 
-    def compute_symcom_sentence(self):
+    def compute_symcom_sentence(self) -> float:
+        """Compute the overall SyMCoM score for the sentence.
+        
+        Returns:
+            Overall SyMCoM score
+        """
         symcom_sentence = 0
         symcom_scores_pos_tags = self.compute_symcom_pos_tags()
 
