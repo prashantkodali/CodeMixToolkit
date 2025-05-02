@@ -21,9 +21,9 @@ Install Instructions:
 docker pull prakod/gcm-codemix-generator
 ```
 
-### Installation instructions (after pulling docker image)
+### Instructions to run the docker image (after pulling docker image)
 ```
-docker run -p 5000:5000 -p 6000:6000 prakod/codemix-gcm-generator (this can alternatively be done using Docker desktop)
+docker run -p 5000:5000 -p 6000:6000 -d prakod/codemix-gcm-generator (this can alternatively be done using Docker desktop)
 ```
 - This will create a container based on the Docker image. Get the ID of the container (using the Desktop app or `docker ps`)
 - Then run:
@@ -52,6 +52,10 @@ jupyter notebook --ip 0.0.0.0 --port 5000 --no-browser --allow-root
  >>> flask run -h 0.0.0.0 -p 6000
  ```
 - (change port and host details as required)
+
+- This command runs the API service in the docker image - these APIs can now be accessed in your host.
+
+- To use the GCM APIs from the docker image, you can find examples in [GCM Generator API Demo.ipynb](GCM Generator API Demo.ipynb) notebook and run the cells to see the functionality of the API.
 
 
 
