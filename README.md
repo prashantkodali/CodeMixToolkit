@@ -1,5 +1,6 @@
 # CodeMixToolkit
-Languages: Hindi, English, Malyalam, Gujarati, Tamil and Telugu
+Languages: Hindi, English
+
 
 Install Instructions:
 1. Download the dist directory
