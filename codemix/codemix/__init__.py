@@ -9,18 +9,19 @@ from .data import (
     CodeMixDataset,
     HFDatasetsReader,
     DatasetRegistry,
-    DATASET_REGISTRY
+    DATASET_REGISTRY,
 )
 
 __version__ = "0.1.0"
 
 __all__ = [
-    'DatasetInfo',
-    'TaskType',
-    'LanguagePair',
-    'CodeMixDataset',
-    'HFDatasetsReader',
-    'DatasetRegistry',
+    "DatasetInfo",
+    "TaskType",
+    "LanguagePair",
+    "CodeMixDataset",
+    "HFDatasetsReader",
+    "DatasetRegistry",
+    "DATASET_REGISTRY",
 ]
 
 # __all__.extend(list(DATASET_REGISTRY.keys()))

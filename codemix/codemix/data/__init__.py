@@ -6,9 +6,6 @@ from .base import (
     HFDatasetsReader
 )
 from .registry import DatasetRegistry
-from .data_collection import (
-    get_dataset_classes
-)
 
 import pkgutil
 import importlib
@@ -21,8 +18,6 @@ for loader, module_name, is_pkg in pkgutil.iter_modules(__path__):
     if hasattr(module, "__DATASET_CLASSES_MAP"):
         _DATASET_CLASSES_MAP.update(module.__DATASET_CLASSES_MAP)
         
-print(_DATASET_CLASSES_MAP)
-
 DATASET_REGISTRY = DatasetRegistry(_DATASET_CLASSES_MAP)
     
 __all__ = [
@@ -32,7 +27,6 @@ __all__ = [
     'CodeMixDataset',
     'HFDatasetsReader',
     'DatasetRegistry',
-    'get_dataset_classes'
 ]
 
 __all__.extend(list(_DATASET_CLASSES_MAP.keys()))
