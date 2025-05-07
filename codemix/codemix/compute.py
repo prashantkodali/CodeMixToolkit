@@ -2,7 +2,7 @@ from typing import Dict, List, Optional, Union
 from torch import device as torch_device
 
 # from minicons import scorer
-from codemix.cs_metrics import SyMCoMTemp #, CodeMixMetricsTemp
+from codemix.cs_metrics import SyMCoMTemp  # , CodeMixMetricsTemp
 import torch
 from transformers import (
     AutoModelForTokenClassification,
@@ -11,6 +11,7 @@ from transformers import (
 from alphabet_detector import AlphabetDetector
 import numpy as np
 import re
+
 # import sys
 # from collections import Counter
 # from datetime import datetime
@@ -62,14 +63,14 @@ alphabet_language_mapping: Dict[str, str] = {
 
 class PoSTagger:
     """A class for Part-of-Speech tagging using transformer models.
-    
+
     This class provides functionality to load a pre-trained POS tagging model and
     use it to predict POS tags for input sentences.
     """
-    
+
     def __init__(self, model_path: str, tokenizer_path: str) -> None:
         """Initialize the PoSTagger.
-        
+
         Args:
             model_path: Path to the pre-trained model
             tokenizer_path: Path to the tokenizer
@@ -78,7 +79,9 @@ class PoSTagger:
         self.tokenizer_path = tokenizer_path
         self.model: Optional[AutoModelForTokenClassification] = None
         self.tokenizer: Optional[AutoTokenizer] = None
-        self.device: torch_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device: torch_device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu"
+        )
 
     def load_model_tokenizer(self) -> None:
         """Load the model and tokenizer from the specified paths."""
@@ -88,10 +91,10 @@ class PoSTagger:
 
     def predict_pos_sentence(self, sentence: str) -> List[str]:
         """Predict POS tags for a given sentence.
-        
+
         Args:
             sentence: Input sentence to tag
-            
+
         Returns:
             List of predicted POS tags for each token in the sentence
         """
@@ -120,14 +123,16 @@ class PoSTagger:
 
 class NERtagger:
     """A class for Named Entity Recognition using transformer models.
-    
+
     This class provides functionality to load a pre-trained NER model and
     use it to predict named entities in input sentences.
     """
-    
-    def __init__(self, model_path: str, tokenizer_path: str, finegrain_labels: bool = False) -> None:
+
+    def __init__(
+        self, model_path: str, tokenizer_path: str, finegrain_labels: bool = False
+    ) -> None:
         """Initialize the NERtagger.
-        
+
         Args:
             model_path: Path to the pre-trained model
             tokenizer_path: Path to the tokenizer
@@ -137,7 +142,9 @@ class NERtagger:
         self.tokenizer_path = tokenizer_path
         self.model: Optional[AutoModelForTokenClassification] = None
         self.tokenizer: Optional[AutoTokenizer] = None
-        self.device: torch_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device: torch_device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu"
+        )
         self.finegrain_labels = finegrain_labels
 
     def load_model_tokenizer(self) -> None:
@@ -148,10 +155,10 @@ class NERtagger:
 
     def predict_ner_sentence(self, sentence: str) -> List[Union[str, bool]]:
         """Predict named entities for a given sentence.
-        
+
         Args:
             sentence: Input sentence to analyze
-            
+
         Returns:
             List of predicted named entity labels for each token in the sentence.
             If finegrain_labels is True, returns detailed NER labels.
@@ -195,28 +202,28 @@ class NERtagger:
 
 class UnicodeLIDtagger:
     """A class for Language Identification (LID) using Unicode-based detection.
-    
+
     This class provides functionality to identify languages in text using Unicode
     character detection and acronym detection.
     """
-    
+
     def __init__(self) -> None:
         """Initialize the UnicodeLIDtagger with regex pattern for acronym detection."""
         self.acro_regex_pattern: str = r"\b[A-Z][A-Z0-9\.]{2,}s?\b"
 
     def combine_lid_ner_acro_labels(
-        self, 
-        acros: List[Union[str, bool]], 
-        ner_predictions: List[Union[str, bool]], 
-        lids: List[str]
+        self,
+        acros: List[Union[str, bool]],
+        ner_predictions: List[Union[str, bool]],
+        lids: List[str],
     ) -> List[str]:
         """Combine LID, NER, and acronym labels into a single label sequence.
-        
+
         Args:
             acros: List of acronym labels
             ner_predictions: List of NER labels
             lids: List of language identification labels
-            
+
         Returns:
             Combined list of labels where NER and acronym labels take precedence
             over LID labels
@@ -236,16 +243,14 @@ class UnicodeLIDtagger:
         return combined_labels
 
     def get_unicode_lid_predictions(
-        self, 
-        sentence: str, 
-        ner_predictions: Optional[List[str]] = None
+        self, sentence: str, ner_predictions: Optional[List[str]] = None
     ) -> tuple[List[str], List[str]]:
         """Get language identification predictions for a sentence.
-        
+
         Args:
             sentence: Input sentence to analyze
             ner_predictions: Optional list of NER predictions for the sentence
-            
+
         Returns:
             Tuple containing:
             - List of tokens from the sentence
@@ -292,14 +297,14 @@ class UnicodeLIDtagger:
 
 class LIDTaggerBhatetal:
     """A placeholder class for the LID tagger based on Bhat et al.'s work.
-    
+
     This class is currently not implemented and serves as a placeholder for future
     implementation of the language identification approach described in Bhat et al.'s work.
     """
-    
+
     def __init__(self, model_path: str, tokenizer_path: str) -> None:
         """Initialize the LIDTaggerBhatetal (not implemented).
-        
+
         Args:
             model_path: Path to the pre-trained model
             tokenizer_path: Path to the tokenizer
@@ -308,10 +313,10 @@ class LIDTaggerBhatetal:
 
     def predict_lid_sentence(self, sentence: str) -> List[str]:
         """Predict language identification for a sentence (not implemented).
-        
+
         Args:
             sentence: Input sentence to analyze
-            
+
         Returns:
             List of language identification labels for each token
         """
@@ -320,14 +325,14 @@ class LIDTaggerBhatetal:
 
 # class CodeMixAnalyzer:
 #     """A class for analyzing code-mixed text.
-    
+
 #     This class provides functionality to analyze code-mixed text by combining
 #     various linguistic features including POS tagging, NER, and language identification.
 #     """
-    
+
 #     def __init__(self, model_path: str, tokenizer_path: str) -> None:
 #         """Initialize the CodeMixAnalyzer.
-        
+
 #         Args:
 #             model_path: Path to the pre-trained model
 #             tokenizer_path: Path to the tokenizer
@@ -346,10 +351,10 @@ class LIDTaggerBhatetal:
 
 #     def get_predictions(self, sentence: str) -> List[str]:
 #         """Get predictions for a given sentence.
-        
+
 #         Args:
 #             sentence: Input sentence to analyze
-            
+
 #         Returns:
 #             List of predicted labels for each token in the sentence
 #         """
@@ -383,18 +388,18 @@ class LIDTaggerBhatetal:
 #             return predicted_labels
 
 #     def combine_lid_ner_acro_labels(
-#         self, 
-#         acros: List[Union[str, bool]], 
-#         ner_predictions: List[Union[str, bool]], 
+#         self,
+#         acros: List[Union[str, bool]],
+#         ner_predictions: List[Union[str, bool]],
 #         lids: List[str]
 #     ) -> List[str]:
 #         """Combine LID, NER, and acronym labels into a single label sequence.
-        
+
 #         Args:
 #             acros: List of acronym labels
 #             ner_predictions: List of NER labels
 #             lids: List of language identification labels
-            
+
 #         Returns:
 #             Combined list of labels where NER and acronym labels take precedence
 #             over LID labels
@@ -414,14 +419,14 @@ class LIDTaggerBhatetal:
 #         return combined_labels
 
 #     def unicode_LID_get_sentence_cmi(
-#         self, 
+#         self,
 #         sentence: str
 #     ) -> tuple[List[str], float, List[str]]:
 #         """Get code-mixing index (CMI) for a sentence using Unicode-based LID.
-        
+
 #         Args:
 #             sentence: Input sentence to analyze
-            
+
 #         Returns:
 #             Tuple containing:
 #             - List of tokens from the sentence
@@ -469,10 +474,10 @@ class LIDTaggerBhatetal:
 
 #     def predictposSent(self, sentence: str) -> List[str]:
 #         """Predict POS tags for a given sentence.
-        
+
 #         Args:
 #             sentence: Input sentence to tag
-            
+
 #         Returns:
 #             List of predicted POS tags for each token in the sentence
 #         """
@@ -499,10 +504,10 @@ class LIDTaggerBhatetal:
 
 #     def generate_symcom_count_features(self, row: pd.Series) -> Dict[str, int]:
 #         """Generate count features for SyMCoM analysis.
-        
+
 #         Args:
 #             row: Pandas Series containing symcom_pos_scores
-            
+
 #         Returns:
 #             Dictionary containing various count features:
 #             - zero_count: Number of zero scores
@@ -545,11 +550,11 @@ class LIDTaggerBhatetal:
 
 #     def get_scores(self, lines: List[str], mlm_model: Any) -> List[float]:
 #         """Get sequence scores for a list of lines using a masked language model.
-        
+
 #         Args:
 #             lines: List of input lines to score
 #             mlm_model: Masked language model to use for scoring
-            
+
 #         Returns:
 #             List of scores for each input line
 #         """

@@ -13,11 +13,11 @@ from typing import List, Dict, Optional, Union, Any
 
 class CodeMixSentence:
     """A class representing a code-mixed sentence with various metrics.
-    
+
     This class provides functionality to compute various code-mixing metrics
     such as CMI (Code-Mixing Index), burstiness, I-index, language entropy,
     M-index, SPavg, and SyMCoM scores.
-    
+
     Attributes:
         lang_tagset: List of language tags to consider
         other_tagset: List of other tags to consider
@@ -28,7 +28,7 @@ class CodeMixSentence:
         LID_Tags: Language identification tags
         PoS_Tags: Part-of-speech tags
     """
-    
+
     def __init__(
         self,
         lang_tagset: Optional[List[str]] = None,
@@ -41,7 +41,7 @@ class CodeMixSentence:
         PoS_Tags: Optional[List[str]] = None,
     ) -> None:
         """Initialize a CodeMixSentence object.
-        
+
         Args:
             lang_tagset: List of language tags to consider
             other_tagset: List of other tags to consider
@@ -119,7 +119,7 @@ class CodeMixSentence:
 
     def _preprocess_LID_Tags(self) -> List[str]:
         """Preprocess language identification tags.
-        
+
         Returns:
             List of processed language identification tags.
         """
@@ -131,9 +131,9 @@ class CodeMixSentence:
 
     def compute_cmi(self) -> Optional[float]:
         """Compute the Code-Mixing Index (CMI).
-        
+
         CMI measures the degree of code-mixing in a sentence.
-        
+
         Returns:
             CMI value between 0 and 100, or None if computation fails.
         """
@@ -159,10 +159,10 @@ class CodeMixSentence:
 
     def compute_mindex(self, k: int = 2) -> float:
         """Compute the M-index, a measure of language diversity.
-        
+
         Args:
             k: Number of languages (default: 2)
-            
+
         Returns:
             M-index value
         """
@@ -175,10 +175,10 @@ class CodeMixSentence:
 
     def compute_lang_entropy(self, k: int = 2) -> float:
         """Compute the language entropy of the sentence.
-        
+
         Args:
             k: Number of languages (default: 2)
-            
+
         Returns:
             Language entropy value
         """
@@ -192,10 +192,10 @@ class CodeMixSentence:
 
     def compute_spavg(self, _: int = 2) -> Optional[float]:
         """Compute the average number of switches per word.
-        
+
         Args:
             _: Unused parameter (kept for compatibility)
-            
+
         Returns:
             Average number of switches per word, or None if computation fails
         """
@@ -218,10 +218,10 @@ class CodeMixSentence:
 
     def compute_i_index(self, k: int = 2) -> float:
         """Compute the I-index, a measure of language alternation.
-        
+
         Args:
             k: Number of languages (default: 2)
-            
+
         Returns:
             I-index value
         """
@@ -240,7 +240,7 @@ class CodeMixSentence:
 
     def compute_burstiness(self) -> Optional[float]:
         """Compute the burstiness of language switches.
-        
+
         Returns:
             Burstiness value between -1 and 1, or None if computation fails
         """
@@ -269,7 +269,7 @@ class CodeMixSentence:
 
     def compute_symcom_pos_tags(self) -> Dict[str, float]:
         """Compute SyMCoM scores for each part-of-speech tag.
-        
+
         Returns:
             Dictionary mapping POS tags to their SyMCoM scores
         """
@@ -291,7 +291,7 @@ class CodeMixSentence:
 
     def compute_symcom_sentence(self) -> float:
         """Compute the overall SyMCoM score for the sentence.
-        
+
         Returns:
             Overall SyMCoM score
         """

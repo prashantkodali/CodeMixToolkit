@@ -31,12 +31,12 @@ em = unit.em
 class AnnotatedTextPrinter:
     """
     A class for creating and displaying annotated text with language and POS information.
-    
+
     This class provides methods to create color-coded text annotations where each token
     is associated with a language and POS tag. It supports both interactive display in
     Jupyter notebooks and HTML export for static visualization.
     """
-    
+
     def __init__(self) -> None:
         """
         Initialize the AnnotatedTextPrinter with a predefined color scheme for different languages.
@@ -52,7 +52,7 @@ class AnnotatedTextPrinter:
         #     "ne": "#8ef",
         #     "acro": "#fea",
         #     "univ": "#c39"}
-        
+
         # self.lang_color_dict = {
         #     "en": "#0072B2",  # Blue
         #     "hi": "#D55E00",  # Orange
@@ -65,36 +65,36 @@ class AnnotatedTextPrinter:
         #     "acro": "#999999", # Gray
         #     "univ": "#FFFFFF"  # White
         # }
-        
+
         self.lang_color_dict: Dict[str, str] = {
-                                "en": "#1f77b4",  # Blue
-                                "hi": "#D55E00",  # Orange
-                                "te": "#2ca02c",  # Green
-                                "ta": "#d62728",  # Red
-                                "gu": "#9467bd",  # Purple
-                                "ka": "#8c564b",  # Brown
-                                "ml": "#e377c2",  # Pink
-                                "ne": "#7f7f7f",  # Gray
-                                "acro": "#bcbd22", # Yellow-Green
-                                "univ": "#17becf"  # Cyan
-                                }
-        
+            "en": "#1f77b4",  # Blue
+            "hi": "#D55E00",  # Orange
+            "te": "#2ca02c",  # Green
+            "ta": "#d62728",  # Red
+            "gu": "#9467bd",  # Purple
+            "ka": "#8c564b",  # Brown
+            "ml": "#e377c2",  # Pink
+            "ne": "#7f7f7f",  # Gray
+            "acro": "#bcbd22",  # Yellow-Green
+            "univ": "#17becf",  # Cyan
+        }
+
         self.str_html: Optional[str] = None
 
     def print_sample_st_annot_text(
-        self, 
-        sample_text: Union[str, List[str]], 
-        sample_langspan: List[str], 
-        sample_posspan: List[str]
+        self,
+        sample_text: Union[str, List[str]],
+        sample_langspan: List[str],
+        sample_posspan: List[str],
     ) -> None:
         """
         Create and display annotated text with language and POS information.
-        
+
         Args:
             sample_text: Input text as either a string (will be split) or list of tokens
             sample_langspan: List of language codes corresponding to each token
             sample_posspan: List of POS tags corresponding to each token
-            
+
         Raises:
             AssertionError: If the lengths of sample_text, sample_langspan, and sample_posspan don't match
             Exception: If an invalid annotation type is encountered
@@ -124,18 +124,18 @@ class AnnotatedTextPrinter:
         # display(HTML('<hr>'))
         # display(HTML(str(out)))
         # display(HTML('<hr>'))
-        
+
         self.str_html = str(out)
-        
+
         # Display in notebook (if running in notebook)
-        display(HTML('<hr>'))
+        display(HTML("<hr>"))
         display(HTML(str(out)))
-        display(HTML('<hr>'))
-        
+        display(HTML("<hr>"))
+
     def export_html(self, file_name: Optional[str] = None) -> None:
         """
         Export the annotated text visualization to an HTML file.
-        
+
         Args:
             file_name: Optional name for the output HTML file. If not provided,
                       defaults to "codemix_visualization.html"
@@ -176,7 +176,6 @@ class AnnotatedTextPrinter:
         # Save to file
         if file_name is None:
             file_name = "codemix_visualization.html"
-        with open(file_name, 'w', encoding='utf-8') as f:
+        with open(file_name, "w", encoding="utf-8") as f:
             f.write(html_content)
             print(f"HTML file saved as {file_name}")
-

@@ -33,11 +33,11 @@ aligner = awesomealign(
 def get_stanza_info(text: str, language: str) -> Dict[str, List[List[str]]]:
     """
     Process text using Stanza NLP pipeline to get tokenization and POS tagging information.
-    
+
     Args:
         text (str): Input text to process
         language (str): Language code (e.g., 'en', 'hi')
-        
+
     Returns:
         Dict[str, List[List[str]]]: Dictionary containing:
             - sentences: List of sentences as strings
@@ -58,15 +58,17 @@ def get_stanza_info(text: str, language: str) -> Dict[str, List[List[str]]]:
 
 
 # creating token alignment map
-def create_alignments_token_map(sent_src: str, sent_tgt: str, alignments: str) -> Optional[Dict[str, str]]:
+def create_alignments_token_map(
+    sent_src: str, sent_tgt: str, alignments: str
+) -> Optional[Dict[str, str]]:
     """
     Create a mapping between aligned tokens from source and target sentences.
-    
+
     Args:
         sent_src (str): Source sentence
         sent_tgt (str): Target sentence
         alignments (str): Alignment string in format "src_idx-tgt_idx src_idx-tgt_idx ..."
-        
+
     Returns:
         Optional[Dict[str, str]]: Dictionary mapping source tokens to target tokens and vice versa,
                                 or None if alignment fails
@@ -90,14 +92,16 @@ def create_alignments_token_map(sent_src: str, sent_tgt: str, alignments: str) -
 
 
 # getting alignments and token map
-def get_alignment_token_map(en_sent: str, hi_sent: str) -> Tuple[str, Optional[Dict[str, str]]]:
+def get_alignment_token_map(
+    en_sent: str, hi_sent: str
+) -> Tuple[str, Optional[Dict[str, str]]]:
     """
     Get alignments and token mapping between English and Hindi sentences.
-    
+
     Args:
         en_sent (str): English sentence
         hi_sent (str): Hindi sentence
-        
+
     Returns:
         Tuple[str, Optional[Dict[str, str]]]: Tuple containing:
             - alignments: Alignment string
@@ -110,15 +114,17 @@ def get_alignment_token_map(en_sent: str, hi_sent: str) -> Tuple[str, Optional[D
 
 # generating alignments for POS tags
 # heuristic - noun, adj, propn
-def replace_noun_adj_single_aligned(sent: List[str], postags: List[str], token_map: Dict[str, str]) -> str:
+def replace_noun_adj_single_aligned(
+    sent: List[str], postags: List[str], token_map: Dict[str, str]
+) -> str:
     """
     Generate a codemixed sentence by replacing nouns, adjectives, and proper nouns with their aligned counterparts.
-    
+
     Args:
         sent (List[str]): List of tokens in the sentence
         postags (List[str]): List of POS tags corresponding to the tokens
         token_map (Dict[str, str]): Dictionary mapping tokens between languages
-        
+
     Returns:
         str: Codemixed sentence with replaced tokens
     """
@@ -140,10 +146,10 @@ def replace_noun_adj_single_aligned(sent: List[str], postags: List[str], token_m
 def get_codemix_candidate(row: pd.Series) -> str:
     """
     Generate codemixed candidates for a single row of the dataframe.
-    
+
     Args:
         row (pd.Series): Row from the dataframe containing tokenized sentences and alignments
-        
+
     Returns:
         str: Generated codemixed sentence
     """
@@ -165,10 +171,10 @@ def get_codemix_candidate(row: pd.Series) -> str:
 def get_codemix_candidates_for_dataframe(df: pd.DataFrame) -> List[str]:
     """
     Generate codemixed candidates for all rows in the dataframe.
-    
+
     Args:
         df (pd.DataFrame): DataFrame containing tokenized sentences and alignments
-        
+
     Returns:
         List[str]: List of codemixed sentences
     """
@@ -184,10 +190,10 @@ def get_codemix_candidates_for_dataframe(df: pd.DataFrame) -> List[str]:
 def set_lang_tokens_postags(df: pd.DataFrame) -> pd.DataFrame:
     """
     Add tokenization and POS tagging information to the dataframe.
-    
+
     Args:
         df (pd.DataFrame): Input dataframe with source and target language columns
-        
+
     Returns:
         pd.DataFrame: DataFrame with added tokenization and POS tagging columns
     """
@@ -219,10 +225,10 @@ def set_lang_tokens_postags(df: pd.DataFrame) -> pd.DataFrame:
 def set_alignments_token_map(df: pd.DataFrame) -> pd.DataFrame:
     """
     Add alignment and token mapping information to the dataframe.
-    
+
     Args:
         df (pd.DataFrame): DataFrame with tokenized sentences
-        
+
     Returns:
         pd.DataFrame: DataFrame with added alignment and token mapping columns
     """
@@ -262,10 +268,10 @@ def set_alignments_token_map(df: pd.DataFrame) -> pd.DataFrame:
 def get_codemix_candidates_for_file(filename: str) -> Optional[pd.DataFrame]:
     """
     Process a JSON file to generate codemixed sentences.
-    
+
     Args:
         filename (str): Path to the input JSON file
-        
+
     Returns:
         Optional[pd.DataFrame]: DataFrame with codemixed sentences, or None if processing fails
     """

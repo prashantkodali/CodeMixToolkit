@@ -9,14 +9,14 @@ from typing import List, Set, Tuple, Iterable
 
 class awesomealign:
     """A class for performing word alignment between source and target sentences using AwesomeAlign model.
-    
+
     This class uses BERT-based models to compute word alignments between pairs of sentences.
     It supports both single sentence pair alignment and batch processing of multiple sentence pairs.
     """
-    
+
     def __init__(self, modelpath: str, tokenizerpath: str) -> None:
         """Initialize the AwesomeAlign model and tokenizer.
-        
+
         Args:
             modelpath (str): Path to the pre-trained BERT model
             tokenizerpath (str): Path to the BERT tokenizer
@@ -26,11 +26,11 @@ class awesomealign:
 
     def get_alignments_sentence_pair(self, src: str, tgt: str) -> str:
         """Get word alignments between a source and target sentence pair.
-        
+
         Args:
             src (str): Source sentence
             tgt (str): Target sentence
-            
+
         Returns:
             str: Space-separated string of word alignments in the format "src_idx-tgt_idx"
         """
@@ -94,13 +94,15 @@ class awesomealign:
 
         return st
 
-    def get_alignments_iter(self, src_iterable: Iterable[str], tgt_iterable: Iterable[str]) -> List[str]:
+    def get_alignments_iter(
+        self, src_iterable: Iterable[str], tgt_iterable: Iterable[str]
+    ) -> List[str]:
         """Get word alignments for multiple sentence pairs.
-        
+
         Args:
             src_iterable (Iterable[str]): Iterable of source sentences
             tgt_iterable (Iterable[str]): Iterable of target sentences
-            
+
         Returns:
             List[str]: List of alignment strings for each sentence pair
         """

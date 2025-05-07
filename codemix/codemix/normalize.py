@@ -5,10 +5,10 @@ from typing import Literal
 class Normalizer:
     """
     A class for normalizing text using AI4Bharat's transliteration engine.
-    
+
     This class provides functionality to transliterate text from one script to another,
     primarily focused on Indic scripts to English and vice versa.
-    
+
     Attributes:
         tgt_script (str): Target script for transliteration (default: "en")
         src_script (str): Source script for transliteration (default: "hi")
@@ -20,11 +20,11 @@ class Normalizer:
         self,
         tgt_script: str = "en",
         src_script: str = "hi",
-        src_script_type: Literal["indic", "roman"] = "indic"
+        src_script_type: Literal["indic", "roman"] = "indic",
     ) -> None:
         """
         Initialize the Normalizer with specified script parameters.
-        
+
         Args:
             tgt_script (str): Target script for transliteration (default: "en")
             src_script (str): Source script for transliteration (default: "hi")
@@ -38,10 +38,10 @@ class Normalizer:
     def normalize_text(self, text: str) -> str:
         """
         Normalize the input text by transliterating it to the target script.
-        
+
         Args:
             text (str): Input text to be normalized
-            
+
         Returns:
             str: Normalized text in the target script
         """
@@ -53,20 +53,20 @@ def normalize_text(
     text: str,
     tgt_script: str = "en",
     src_script: str = "hi",
-    src_script_type: Literal["indic", "roman"] = "indic"
+    src_script_type: Literal["indic", "roman"] = "indic",
 ) -> str:
     """
     Normalize text using the AI4Bharat transliteration engine.
-    
+
     Args:
         text (str): Input text to be normalized
         tgt_script (str): Target script for transliteration (default: "en")
         src_script (str): Source script for transliteration (default: "hi")
         src_script_type (Literal["indic", "roman"]): Type of source script (default: "indic")
-        
+
     Returns:
         str: Normalized text in the target script
-        
+
     Raises:
         NotImplementedError: This function is not yet implemented
     """
@@ -77,17 +77,17 @@ def romanize_text(
     text: str,
     tgt_script: str = "en",
     src_script: str = "hi",
-    src_script_type: Literal["indic", "roman"] = "indic"
+    src_script_type: Literal["indic", "roman"] = "indic",
 ) -> str:
     """
     Convert text to Roman script using AI4Bharat's transliteration engine.
-    
+
     Args:
         text (str): Input text to be romanized
         tgt_script (str): Target script for transliteration (default: "en")
         src_script (str): Source script for transliteration (default: "hi")
         src_script_type (Literal["indic", "roman"]): Type of source script (default: "indic")
-        
+
     Returns:
         str: Romanized text
     """

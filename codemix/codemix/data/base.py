@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
-from typing import List, Optional, Union 
+from typing import List, Optional, Union
 import pandas as pd
 from datasets import Dataset, DatasetDict, load_dataset
 
@@ -30,6 +30,7 @@ class TaskType(Enum):
 @dataclass
 class DatasetInfo:
     """Class to store dataset information"""
+
     name: str
     source: str  # 'huggingface' or 'local'
     task_type: TaskType
@@ -94,8 +95,6 @@ class HFDatasetsReader(CodeMixDataset):
     def load(self) -> Union[Dataset, DatasetDict]:
         """Load the dataset from HuggingFace"""
         self.data = load_dataset(
-            self.dataset_info.source, 
-            self.dataset_config, 
-            **self.kwargs
+            self.dataset_info.source, self.dataset_config, **self.kwargs
         )
         return self.data
