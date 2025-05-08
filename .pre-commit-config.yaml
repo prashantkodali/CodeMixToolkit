@@ -3,4 +3,5 @@ repos:
     rev: v0.4.5  # or the latest
     hooks:
       - id: ruff
+        args: ["--select", "E", "F"]
       - id: ruff-format
