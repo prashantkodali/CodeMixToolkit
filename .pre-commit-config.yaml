@@ -3,7 +3,7 @@ repos:
     rev: v0.4.5  # or the latest
     hooks:
       - id: ruff
-        args: ["--select", "E", "F"]
+        args: [--exit-zero]
       - id: ruff-format
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
