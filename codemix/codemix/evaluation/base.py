@@ -3,7 +3,7 @@ Base evaluator class that defines the interface for all evaluators.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Union
+from typing import Any, Dict, Union, UnionTest
 
 from ..data.base import CodeMixDataset
 
