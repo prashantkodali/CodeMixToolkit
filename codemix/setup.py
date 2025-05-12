@@ -21,5 +21,6 @@ setup(
         "datasets",
         "alphabet-detector",
         "ai4bharat-transliteration",
+        "python-dotenv",
     ],
 )

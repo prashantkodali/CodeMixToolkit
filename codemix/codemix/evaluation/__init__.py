@@ -9,19 +9,16 @@ This module provides various evaluation capabilities:
 """
 
 from .base import BaseEvaluator
-from .llm_evaluator import LLMEvaluator
-from .model_evaluator import FineTunedModelEvaluator
 from .intrinsic_evaluator import PerplexityEvaluator
-from .metrics import ClassificationMetrics, GenerationMetrics, compute_metrics
+from .llm_evaluator import LLMEvaluator
+from .metrics import EvaluationMetrics
 
 __version__ = "0.1.0"
 
 __all__ = [
     "BaseEvaluator",
     "LLMEvaluator",
-    "FineTunedModelEvaluator",
     "PerplexityEvaluator",
-    "ClassificationMetrics",
-    "GenerationMetrics",
-    "compute_metrics",
+    "EvaluationMetrics",
+    "EvaluationMetrics",
 ]

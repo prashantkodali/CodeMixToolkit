@@ -1,6 +1,7 @@
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
 from typing import List, Optional, Union
+
 import pandas as pd
 from datasets import Dataset, DatasetDict, load_dataset
 
@@ -89,12 +90,11 @@ class HFDatasetsReader(CodeMixDataset):
 
     def __repr__(self) -> str:
         """String representation of the dataset"""
-        return f"HFDatasetsReader(dataset_name={self.dataset_name}, \
-        dataset_info={self.dataset_info},)"
+        return f"HFDatasetsReader(dataset_info={self.dataset_info},)"
 
-    def load(self) -> Union[Dataset, DatasetDict]:
+    def load(self, **kwargs) -> Union[Dataset, DatasetDict]:
         """Load the dataset from HuggingFace"""
         self.data = load_dataset(
-            self.dataset_info.source, self.dataset_config, **self.kwargs
+            self.dataset_info.source, self.dataset_config, **kwargs
         )
         return self.data

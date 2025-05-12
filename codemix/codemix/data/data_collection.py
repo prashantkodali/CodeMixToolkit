@@ -1,4 +1,4 @@
-from .base import HFDatasetsReader, DatasetInfo, TaskType, LanguagePair, CodeMixDataset
+from .base import CodeMixDataset, DatasetInfo, HFDatasetsReader, LanguagePair, TaskType
 
 __DATASET_CLASSES_MAP = {}
 
@@ -145,7 +145,7 @@ class HateSpeechEnHiBohraEtAl(HFDatasetsReader):
             dataset_name="hate-speech-en-hi-bohra-et-al",
             dataset_info=DatasetInfo(
                 name="hate-speech-en-hi-bohra-et-al",
-                source="prakod/hate_speech_en_hi_bohra_et_al",
+                source="prakod/hate_speech_enhi_bohraetal",
                 task_type=TaskType.SEQUENCE_CLASSIFICATION,
                 language_pair=LanguagePair.EN_HI,
                 input_fields=["text"],
