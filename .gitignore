@@ -1,5 +1,6 @@
 .env
 .ipynb_checkpoints
+temp_testing_scripts
 Running_notes_prakod.md
 __pycache__/
 *.py[cod]
