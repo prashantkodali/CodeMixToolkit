@@ -58,15 +58,14 @@ jupyter notebook --ip 0.0.0.0 --port 5000 --no-browser --allow-root
 
 - To use the GCM APIs from the docker image, you can find examples in [GCM Generator API Demo.ipynb](GCM Generator API Demo.ipynb) notebook and run the cells to see the functionality of the API.
 
-
-
-# CSNLI API Service
+<details>
+<summary><h1>CSNLI API Service</h1></summary>
 
 A FastAPI-based service for language identification and text processing, particularly focused on Hinglish (Hindi-English) text processing.
 
-## CSNLI API Setup
+### CSNLI API Setup
 
-### Prerequisites
+#### Prerequisites
 - Python 3.7+
 - Required Python packages:
   - fastapi
@@ -74,7 +73,7 @@ A FastAPI-based service for language identification and text processing, particu
   - pydantic
   - requests (for testing)
 
-### Installation
+#### Installation
 
 1. Install the required packages:
 ```bash
@@ -86,9 +85,9 @@ pip install fastapi uvicorn pydantic requests
    - `nmt_models/rom2hin.pt`
    - `nmt_models/eng2eng.pt`
 
-## Running the CSNLI Service
+### Running the CSNLI Service
 
-### Development Mode
+#### Development Mode
 ```bash
 # Using Python directly
 python csnli_api.py
@@ -97,20 +96,20 @@ python csnli_api.py
 uvicorn csnli_api:app --host 0.0.0.0 --port 6001 --reload
 ```
 
-### Production Mode
+#### Production Mode
 ```bash
 uvicorn csnli_api:app --host 0.0.0.0 --port 6001
 ```
 
-## CSNLI API Documentation
+### CSNLI API Documentation
 
 Once the service is running, you can access:
 - Interactive API documentation: `http://localhost:6001/docs`
 - Alternative documentation: `http://localhost:6001/redoc`
 
-## CSNLI API Endpoint
+### CSNLI API Endpoint
 
-### POST /csnli-lid
+#### POST /csnli-lid
 Processes input text for language identification and normalization.
 
 **Request Body:**
@@ -132,7 +131,7 @@ Processes input text for language identification and normalization.
 }
 ```
 
-## Testing the CSNLI API
+### Testing the CSNLI API
 
 1. Make sure the API service is running
 2. Run the test script:
@@ -147,16 +146,16 @@ The test script includes several test cases:
 - Mixed Hindi-English text
 - Another Hinglish example
 
-## CSNLI API Example Usage
+### CSNLI API Example Usage
 
-### Using curl
+#### Using curl
 ```bash
 curl -X POST "http://localhost:6001/csnli-lid" \
      -H "Content-Type: application/json" \
      -d '{"text": "i thght mosam dfrnt hoga bs fog h"}'
 ```
 
-### Using Python
+#### Using Python
 ```python
 import requests
 
@@ -168,7 +167,7 @@ response = requests.post(url, headers=headers, json=data)
 print(response.json())
 ```
 
-## CSNLI API Error Handling
+### CSNLI API Error Handling
 
 The API handles various error cases:
 - Invalid input format
@@ -177,6 +176,7 @@ The API handles various error cases:
 
 All errors are returned with appropriate HTTP status codes and error messages.
 
-## Contributing
+### Contributing
 
 Feel free to submit issues and enhancement requests.
+</details>
