@@ -1,1 +1,14 @@
+.env
 .ipynb_checkpoints
+Running_notes_prakod.md
+__pycache__/
+*.py[cod]
+*.egg-info/
+codemix/2-xlmr-onlyUDTokensLemmas-20210917T091217Z-001.zip
+codemix/2-xlmr-onlyUDTokensLemmas
+csnli/lm/
+csnli/nmt/
+csnli/nmt_models/
+csnli/lid_models/
+csnli/dicts/
+csnli/lm/

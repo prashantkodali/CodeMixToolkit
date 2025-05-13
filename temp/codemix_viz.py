@@ -8,7 +8,8 @@ from ast import literal_eval
 from IPython.display import HTML, display
 
 # Only works in 3.7+: from htbuilder import div, span
-div = H.div
+# div = H.div
+from htbuilder import div
 span = H.span
 
 # Only works in 3.7+: from htbuilder.units import px, rem, em
