@@ -5,6 +5,8 @@ Running_notes_prakod.md
 __pycache__/
 *.py[cod]
 *.egg-info/
+dist/
+build/
 codemix/2-xlmr-onlyUDTokensLemmas-20210917T091217Z-001.zip
 codemix/2-xlmr-onlyUDTokensLemmas
 csnli/lm/

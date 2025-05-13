@@ -26,9 +26,9 @@ __all__ = [
     "HFDatasetsReader",
     "DatasetRegistry",
     "DATASET_REGISTRY",
-    "config",  # Expose the config instance
-    "set_env_file",  # Expose set_env_file function
-    "CodeMixMetrics",  # Expose CodeMixMetrics class
-    "CodeMixSentence",  # Expose CodeMixSentence class
-    "codemix_viz",  # Expose codemix_viz module
+    "config",
+    "set_env_file",
+    "CodeMixMetrics",
+    "CodeMixSentence",
+    "codemix_viz",
 ]

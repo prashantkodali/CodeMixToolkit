@@ -1,12 +1,21 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
+
+def read_version():
+    version = {}
+    with open("src/codemixtoolkit/_version.py") as f:
+        exec(f.read(), version)
+    return version["__version__"]
+
 
 setup(
-    name="codemix",
-    version="1.0",
+    name="codemixtoolkit",
+    version=read_version(),
     author="Prashant Kodali",
     author_email="prashant.kodali@research.iiit.ac.in",
     description="A toolkit for code-mixed language processing",
-    packages=["codemix"],
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
     install_requires=[
         "ai4bharat_transliteration==1.1.3",
         "alphabet_detector==0.0.7",
