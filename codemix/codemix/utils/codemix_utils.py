@@ -11,6 +11,242 @@ from statistics import StatisticsError
 from typing import List, Dict, Optional, Union, Any
 
 
+class CodeMixMetrics:
+    """A class representing code-mixing metrics.
+
+    This class provides static methods to compute various code-mixing metrics
+    such as CMI (Code-Mixing Index), burstiness, I-index, language entropy,
+    M-index, SPavg, and SyMCoM scores.
+    """
+
+    @staticmethod
+    def compute_cmi(lid_tags: List[str], lang_tagset: List[str]) -> Optional[float]:
+        """Compute the Code-Mixing Index (CMI).
+
+        CMI measures the degree of code-mixing in a sentence.
+
+        Args:
+            lid_tags: List of language identification tags
+            lang_tagset: List of language tags to consider
+
+        Returns:
+            CMI value between 0 and 100, or None if computation fails.
+        """
+        try:
+            c = Counter(lid_tags)
+            if len(c.most_common()) == 1:  # only one language is present
+                print("One")
+                return 0
+            if len(c.most_common()) == 0:  # no language tokens.
+                print("Zero")
+                return 0
+
+            max_wi = c.most_common()[0][1]
+            n = len(lid_tags)
+            u = sum([v for k, v in c.items() if k not in lang_tagset])
+            if n == u:
+                return 0
+            return 100 * (1 - (max_wi / (n - u)))
+        except:
+            print("Error in cmi")
+            return None
+
+    @staticmethod
+    def compute_mindex(
+        lid_tags: List[str], lang_tagset: List[str], k: int = 2
+    ) -> float:
+        """Compute the M-index, a measure of language diversity.
+
+        Args:
+            lid_tags: List of language identification tags
+            lang_tagset: List of language tags to consider
+            k: Number of languages (default: 2)
+
+        Returns:
+            M-index value
+        """
+        c = Counter(lid_tags)
+        total = sum([v for k, v in c.items() if k in lang_tagset])
+        term = sum([(v / total) ** 2 for k, v in c.items() if k in lang_tagset])
+        return (1 - term) / ((k - 1) * term)
+
+    @staticmethod
+    def compute_lang_entropy(
+        lid_tags: List[str], lang_tagset: List[str], k: int = 2
+    ) -> float:
+        """Compute the language entropy of the sentence.
+
+        Args:
+            lid_tags: List of language identification tags
+            lang_tagset: List of language tags to consider
+            k: Number of languages (default: 2)
+
+        Returns:
+            Language entropy value
+        """
+        c = Counter(lid_tags)
+        total = sum([v for k, v in c.items() if k in lang_tagset])
+        terms = [(v / total) for k, v in c.items() if k in lang_tagset]
+        result = sum([(i * math.log2(i)) for i in terms])
+        return -result
+
+    @staticmethod
+    def compute_spavg(
+        lid_tags: List[str], other_tagset: List[str], _: int = 2
+    ) -> Optional[float]:
+        """Compute the average number of switches per word.
+
+        Args:
+            lid_tags: List of language identification tags
+            other_tagset: List of other tags to consider
+            _: Unused parameter (kept for compatibility)
+
+        Returns:
+            Average number of switches per word, or None if computation fails
+        """
+        try:
+            x = [el.lower() for el in lid_tags]
+
+            count = 0
+            mem = None
+            for l_i, l_j in zip(x, x[1:]):
+                if l_i in other_tagset:
+                    continue
+                if l_i != l_j:
+                    count += 1
+
+            return count
+
+        except TypeError:
+            return None
+
+    @staticmethod
+    def compute_i_index(
+        lid_tags: List[str], other_tagset: List[str], k: int = 2
+    ) -> float:
+        """Compute the I-index, a measure of language alternation.
+
+        Args:
+            lid_tags: List of language identification tags
+            other_tagset: List of other tags to consider
+            k: Number of languages (default: 2)
+
+        Returns:
+            I-index value
+        """
+        x = [el.lower() for el in lid_tags]
+
+        count = 0
+        mem = None
+        for l_i, l_j in zip(x, x[1:]):
+            if l_i in other_tagset:
+                continue
+            if l_i != l_j:
+                count += 1
+
+        return count / (len(x) - 1)
+
+    @staticmethod
+    def compute_burstiness(
+        lid_tags: List[str], other_tagset: List[str]
+    ) -> Optional[float]:
+        """Compute the burstiness of language switches.
+
+        Args:
+            lid_tags: List of language identification tags
+            other_tagset: List of other tags to consider
+
+        Returns:
+            Burstiness value between -1 and 1, or None if computation fails
+        """
+        try:
+            x = list(filter(lambda a: a not in other_tagset, lid_tags))
+            spans = []
+            cnt = 0
+            prev = x[0]
+            for i in x[1:]:
+                if i == prev:
+                    cnt += 1
+                else:
+                    spans.append(cnt + 1)
+                    cnt = 0
+                prev = i
+            if cnt != 0:
+                spans.append(cnt + 1)
+            span_std = stdev(spans)
+            span_mean = mean(spans)
+            return (span_std - span_mean) / (span_std + span_mean)
+        except StatisticsError:
+            return None
+        except TypeError:
+            return None
+
+    @staticmethod
+    def compute_symcom_pos_tags(
+        poS_count_map: Dict[str, int],
+        lid_pos_count_map: Dict[str, int],
+        l1: str,
+        l2: str,
+    ) -> Dict[str, float]:
+        """Compute SyMCoM scores for each part-of-speech tag.
+
+        Args:
+            poS_count_map: Dictionary mapping POS tags to their counts
+            lid_pos_count_map: Dictionary mapping combined LID-POS tags to their counts
+            l1: Primary language code
+            l2: Secondary language code
+
+        Returns:
+            Dictionary mapping POS tags to their SyMCoM scores
+        """
+        symcom_scores_pos_tags = {}
+
+        for postag in poS_count_map:
+            if postag not in ["PUNCT", "SYM", "X"]:
+                pos_l1 = lid_pos_count_map.get(postag + "_" + l1, 0)
+                pos_l2 = lid_pos_count_map.get(postag + "_" + l2, 0)
+
+                try:
+                    symcom_scores_pos_tags[postag + "_symcom"] = (pos_l1 - pos_l2) / (
+                        pos_l1 + pos_l2
+                    )
+                except ZeroDivisionError:
+                    pass
+
+        return symcom_scores_pos_tags
+
+    @staticmethod
+    def compute_symcom_sentence(
+        poS_count_map: Dict[str, int],
+        lid_pos_count_map: Dict[str, int],
+        l1: str,
+        l2: str,
+        length: int,
+    ) -> float:
+        """Compute the overall SyMCoM score for the sentence.
+
+        Args:
+            poS_count_map: Dictionary mapping POS tags to their counts
+            lid_pos_count_map: Dictionary mapping combined LID-POS tags to their counts
+            l1: Primary language code
+            l2: Secondary language code
+            length: Length of the sentence
+
+        Returns:
+            Overall SyMCoM score
+        """
+        symcom_sentence = 0
+        symcom_scores_pos_tags = CodeMixMetrics.compute_symcom_pos_tags(
+            poS_count_map, lid_pos_count_map, l1, l2
+        )
+
+        for pos, score in symcom_scores_pos_tags.items():
+            pos = pos.split("_")[0]
+            symcom_sentence += abs(score) * (poS_count_map[pos] / length)
+
+        return symcom_sentence
+
+
 class CodeMixSentence:
     """A class representing a code-mixed sentence with various metrics.
 
@@ -61,6 +297,7 @@ class CodeMixSentence:
         self.l1 = l1
         self.l2 = l2
         self.sentence = sentence
+        self.sentence_alternatives = None
         self.tokens = tokens
         self.LID_Tags = LID_Tags
         self.PoS_Tags = PoS_Tags
@@ -74,6 +311,10 @@ class CodeMixSentence:
 
             lid_pos_combined = [pos + "_" + lid for lid, pos in zip(LID_Tags, PoS_Tags)]
             self.LID_POS_count_map = dict(Counter(lid_pos_combined).most_common())
+        else:
+            self.LID_count_map = None
+            self.PoS_count_map = None
+            self.LID_POS_count_map = None
 
         self.length = len(LID_Tags)
         self.cmi: Optional[float] = None
@@ -109,13 +350,19 @@ class CodeMixSentence:
 
     def compute_all_metrics(self) -> None:
         """Compute all available metrics for the code-mixed sentence."""
-        self.cmi = self.compute_cmi()
-        self.burstiness = self.compute_burstiness()
-        self.i_index = self.compute_i_index()
-        self.lang_entropy = self.compute_lang_entropy()
-        self.mindex = self.compute_mindex()
-        self.spavg = self.compute_spavg()
-        self.symcom_sentence = self.compute_symcom_sentence()
+        self.cmi = CodeMixMetrics.compute_cmi(self.LID_Tags, self.lang_tagset)
+        self.burstiness = CodeMixMetrics.compute_burstiness(
+            self.LID_Tags, self.other_tagset
+        )
+        self.i_index = CodeMixMetrics.compute_i_index(self.LID_Tags, self.other_tagset)
+        self.lang_entropy = CodeMixMetrics.compute_lang_entropy(
+            self.LID_Tags, self.lang_tagset
+        )
+        self.mindex = CodeMixMetrics.compute_mindex(self.LID_Tags, self.lang_tagset)
+        self.spavg = CodeMixMetrics.compute_spavg(self.LID_Tags, self.other_tagset)
+        self.symcom_sentence = CodeMixMetrics.compute_symcom_sentence(
+            self.PoS_count_map, self.LID_POS_count_map, self.l1, self.l2, self.length
+        )
 
     def _preprocess_LID_Tags(self) -> List[str]:
         """Preprocess language identification tags.
@@ -303,197 +550,3 @@ class CodeMixSentence:
             symcom_sentence += abs(score) * (self.PoS_count_map[pos] / self.length)
 
         return symcom_sentence
-
-
-class CodeMixSentenceTemp:
-    def __init__(self, sentence=None, tokens=None, LID_Tags=None, PoS_Tags=None):
-        self.sentence = sentence
-        self.tokens = tokens
-        self.LID_Tags = LID_Tags
-        self.PoS_Tags = PoS_Tags
-        # has to changed to take length from number of token
-        self.length = len(LID_Tags)
-
-        self.LID_count_map = dict(Counter(LID_Tags).most_common())
-        self.PoS_count_map = dict(Counter(PoS_Tags).most_common())
-
-        lid_pos_combined = [pos + "_" + lid for lid, pos in zip(LID_Tags, PoS_Tags)]
-        self.LID_POS_count_map = dict(Counter(lid_pos_combined).most_common())
-
-
-class CodeMixMetricsTemp:
-    def __init__(self, lang_tags, other_tags):
-        self.lang_tags = [tag.lower() for tag in lang_tags]
-        self.other_tags = [tag.lower() for tag in other_tags]
-
-    def _preprocess_text(self, x):
-        if isinstance(x, str):
-            x = x.split()
-        x = [i for i in x if i in self.lang_tags]
-        return x
-
-    def cmi(self, x):
-        try:
-            x = self._preprocess_text(x)
-            c = Counter(x)
-            if len(c.most_common()) == 1:  # only one language is present
-                print("One")
-                return 0
-            if len(c.most_common()) == 0:  # no language tokens.
-                print("Zero")
-                return 0
-
-            max_wi = c.most_common()[0][1]
-            n = len(x)
-            u = sum([v for k, v in c.items() if k not in self.lang_tags])
-            if n == u:
-                return 0
-            return 100 * (1 - (max_wi / (n - u)))
-        except:
-            return None
-
-    def mindex(self, x, k=2):
-        x = self._preprocess_text(x)
-        c = Counter(x)
-        total = sum([v for k, v in c.items() if k in self.lang_tags])
-        term = sum([(v / total) ** 2 for k, v in c.items() if k in self.lang_tags])
-        return (1 - term) / ((k - 1) * term)
-
-    def lang_entropy(self, x, k=2):
-        x = self._preprocess_text(x)
-        c = Counter(x)
-        total = sum([v for k, v in c.items() if k in self.lang_tags])
-        terms = [(v / total) for k, v in c.items() if k in self.lang_tags]
-        result = sum([(i * math.log2(i)) for i in terms])
-        return -result
-
-    def spavg(self, x, _=2):
-        try:
-            x = [el.lower() for el in x]
-
-            x = self._preprocess_text(x)
-            count = 0
-            mem = None
-            for l_i, l_j in zip(x, x[1:]):
-                if l_i in self.other_tags:
-                    continue
-                if l_i != l_j:
-                    count += 1
-
-            return count
-
-        except TypeError:
-            return None
-
-    def i_index(self, x, k=2):
-        x = [el.lower() for el in x]
-
-        x = self._preprocess_text(x)
-        count = 0
-        mem = None
-        for l_i, l_j in zip(x, x[1:]):
-            if l_i in self.other_tags:
-                continue
-            if l_i != l_j:
-                count += 1
-
-        return count / (len(x) - 1)
-
-    def burstiness(self, x):
-        try:
-            x = self._preprocess_text(x)
-            x = list(filter(lambda a: a not in self.other_tags, x))
-            spans = []
-            cnt = 0
-            prev = x[0]
-            for i in x[1:]:
-                if i == prev:
-                    cnt += 1
-                else:
-                    spans.append(cnt + 1)
-                    cnt = 0
-                prev = i
-            if cnt != 0:
-                spans.append(cnt + 1)
-            span_std = stdev(spans)
-            span_mean = mean(spans)
-            return (span_std - span_mean) / (span_std + span_mean)
-        except StatisticsError:
-            return None
-        except TypeError:
-            return None
-
-
-class SyMCoMTemp:
-    def __init__(self, LID_tagset=None, PoS_tagset=None, L1=None, L2=None):
-        self.LID_tagset = LID_tagset
-        self.PoS_tagset = PoS_tagset
-        self.l1 = L1
-        self.l2 = L2
-
-    def symcom_pos_tags(self, codemixsent_obj):
-        symcom_scores_pos_tags = {}
-        l1 = self.l1
-        l2 = self.l2
-
-        for postag in codemixsent_obj.PoS_count_map:
-            if postag not in ["PUNCT", "SYM", "X"]:
-                pos_l1 = codemixsent_obj.LID_POS_count_map.get(
-                    postag + "_" + self.l1, 0
-                )
-                pos_l2 = codemixsent_obj.LID_POS_count_map.get(
-                    postag + "_" + self.l2, 0
-                )
-
-                try:
-                    symcom_scores_pos_tags[postag + "_symcom"] = (pos_l1 - pos_l2) / (
-                        pos_l1 + pos_l2
-                    )
-                except ZeroDivisionError:
-                    pass
-
-        return symcom_scores_pos_tags
-
-    def symcom_sentence(self, codemixsent_obj):
-        symcom_sentence = 0
-        symcom_scores_pos_tags = self.symcom_pos_tags(codemixsent_obj)
-
-        for pos, score in symcom_scores_pos_tags.items():
-            pos = pos.split("_")[0]
-            symcom_sentence += abs(score) * (
-                codemixsent_obj.PoS_count_map[pos] / codemixsent_obj.length
-            )
-
-        return symcom_sentence
-
-
-"""
-In [8]: symcom = cs_metrics.SyMCoM(L1 = 'en',
-   ...:                 L2 = 'hi',
-   ...:                 LID_tagset = ['hi', 'en', 'ne', 'univ', 'acro'],
-   ...:                 PoS_tagset = ['NOUN', 'ADV', 'VERB', 'AUX', 'ADJ', 'ADP', 'PUNCT', 'DET', 'PRON', 'PROPN', 'PART', 'CCONJ', 'SCONJ', 'INTJ', 'NUM', 'SYM','X'])
-
-In [9]: tokens = ['Gully', 'cricket', 'चल', 'रहा', 'हैं', 'यहां', '"', '(', 'Soniya', ')', 'Gandhi', '"']
-   ...: LID_Tags = ['en', 'en', 'hi', 'hi', 'hi', 'hi', 'univ', 'univ', 'ne', 'univ', 'ne', 'univ']
-   ...: PoS_Tags = ['ADJ', 'PROPN', 'VERB', 'AUX', 'AUX', 'ADV', 'PUNCT', 'PUNCT', 'PROPN', 'PUNCT', 'PROPN', 'PUNCT']
-   ...: 
-   ...: cm_sentence = cs_metrics.CodeMIxSentence(sentence = None,
-   ...:                                      tokens = tokens,
-   ...:                                      LID_Tags = LID_Tags,
-   ...:                                      PoS_Tags = PoS_Tags)
-
-In [10]: symcom.symcom_pos_tags(cm_sentence)
-Out[10]: 
-{'PROPN_symcom': 1.0,
- 'AUX_symcom': -1.0,
- 'ADJ_symcom': 1.0,
- 'VERB_symcom': -1.0,
- 'ADV_symcom': -1.0}
-
-In [11]: symcom.symcom_sentence(cm_sentence)
-Out[11]: 0.6666666666666666
-
-In [12]: 
-
-
-"""
