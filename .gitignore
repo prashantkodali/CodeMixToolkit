@@ -7,8 +7,9 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-codemix/2-xlmr-onlyUDTokensLemmas-20210917T091217Z-001.zip
-codemix/2-xlmr-onlyUDTokensLemmas
+temp/2-xlmr-onlyUDTokensLemmas-20210917T091217Z-001.zip
+temp/2-xlmr-onlyUDTokensLemmas
+temp/
 csnli/lm/
 csnli/nmt/
 csnli/nmt_models/

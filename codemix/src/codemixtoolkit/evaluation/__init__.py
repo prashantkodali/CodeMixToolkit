@@ -13,7 +13,6 @@ from .intrinsic_evaluator import PerplexityEvaluator
 from .llm_evaluator import LLMEvaluator
 from .metrics import EvaluationMetrics
 
-__version__ = "0.1.0"
 
 __all__ = [
     "BaseEvaluator",
