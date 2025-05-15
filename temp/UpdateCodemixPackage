@@ -1,4 +1,0 @@
-Update using the following commands:
-1. python setup.py install
-2. python setup.py sdist bdist_wheel
-3. pip install .

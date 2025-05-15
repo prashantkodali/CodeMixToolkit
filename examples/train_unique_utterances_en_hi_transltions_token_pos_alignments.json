@@ -1,0 +1,77 @@
+[
+    {
+        "en":"Okay, how much does it cost?",
+        "hi":"ठीक है, इसकी लागत कितनी है?",
+        "lang1":"en",
+        "lang1_tokens":[
+            [
+                "Okay",
+                ",",
+                "how",
+                "much",
+                "does",
+                "it",
+                "cost",
+                "?"
+            ]
+        ],
+        "lang1_pos":[
+            [
+                "INTJ",
+                "PUNCT",
+                "ADV",
+                "ADV",
+                "AUX",
+                "PRON",
+                "VERB",
+                "PUNCT"
+            ]
+        ],
+        "lang2":"hi",
+        "lang2_tokens":[
+            [
+                "ठीक",
+                "है",
+                ",",
+                "इसकी",
+                "लागत",
+                "कितनी",
+                "है",
+                "?"
+            ]
+        ],
+        "lang2_pos":[
+            [
+                "ADJ",
+                "AUX",
+                "PUNCT",
+                "PRON",
+                "NOUN",
+                "DET",
+                "AUX",
+                "PUNCT"
+            ]
+        ],
+        "alignments_awesomealign":[
+            "0-0 0-1 1-2 2-5 3-4 4-6 5-3 6-4 7-7 "
+        ],
+        "token_alignment_map_awesomealign":[
+            {
+                "Okay":"है",
+                "ठीक":"Okay",
+                "है":"does",
+                ",":",",
+                "how":"कितनी",
+                "कितनी":"how",
+                "much":"लागत",
+                "लागत":"cost",
+                "does":"है",
+                "it":"इसकी",
+                "इसकी":"it",
+                "cost":"लागत",
+                "?":"?"
+            }
+        ],
+        "codemixed-sentences":" Okay है , इसकी cost कितनी है ?"
+    }
+]

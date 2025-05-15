@@ -91,21 +91,7 @@ pip install fastapi uvicorn pydantic requests
 ```bash
 # Using Python directly
 python csnli_api.py
-
-# Or using uvicorn with auto-reload
-uvicorn csnli_api:app --host 0.0.0.0 --port 6001 --reload
 ```
-
-#### Production Mode
-```bash
-uvicorn csnli_api:app --host 0.0.0.0 --port 6001
-```
-
-### CSNLI API Documentation
-
-Once the service is running, you can access:
-- Interactive API documentation: `http://localhost:6001/docs`
-- Alternative documentation: `http://localhost:6001/redoc`
 
 ### CSNLI API Endpoint
 
@@ -131,20 +117,8 @@ Processes input text for language identification and normalization.
 }
 ```
 
-### Testing the CSNLI API
-
-1. Make sure the API service is running
-2. Run the test script:
-```bash
-python test_csnli_api.py
 ```
 
-The test script includes several test cases:
-- Hinglish text
-- Pure Hindi text
-- Pure English text
-- Mixed Hindi-English text
-- Another Hinglish example
 
 ### CSNLI API Example Usage
 
@@ -154,6 +128,14 @@ curl -X POST "http://localhost:6001/csnli-lid" \
      -H "Content-Type: application/json" \
      -d '{"text": "i thght mosam dfrnt hoga bs fog h"}'
 ```
+
+The test script includes several test cases:
+- Hinglish text
+- Pure Hindi text
+- Pure English text
+- Mixed Hindi-English text
+- Another Hinglish example
+
 
 #### Using Python
 ```python
