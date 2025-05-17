@@ -4,4 +4,14 @@ reference for the technical implementation of the
 `CodeMixToolkit` project code.
 
 
-::: src.codemixtoolkit
+## Utils Module
+::: src.codemixtoolkit.utils
+
+## Models Module
+::: src.codemixtoolkit.models
+
+## Data Module
+::: src.codemixtoolkit.data
+
+## Evaluation Module
+::: src.codemixtoolkit.evaluation
