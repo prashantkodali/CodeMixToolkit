@@ -10,13 +10,13 @@ This module provides various evaluation capabilities:
 
 from .base import BaseEvaluator
 from .intrinsic_evaluator import PerplexityEvaluator
-from .llm_evaluator import LLMEvaluator
+from .evaluator import Evaluator
 from .metrics import EvaluationMetrics
 
 
 __all__ = [
     "BaseEvaluator",
-    "LLMEvaluator",
+    "Evaluator",
     "PerplexityEvaluator",
     "EvaluationMetrics",
     "EvaluationMetrics",
