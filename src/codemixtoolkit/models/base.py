@@ -2,6 +2,9 @@ from typing import Dict, List, Optional, Union, Any
 from datasets import Dataset, DatasetDict
 from tqdm import tqdm
 from abc import ABC, abstractmethod
+from ..utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class BaseModel(ABC):
@@ -13,6 +16,7 @@ class BaseModel(ABC):
 
     def __init__(self):
         """Initialize the base model."""
+        logger.debug("Initializing BaseModel")
         pass
 
     @abstractmethod
@@ -57,6 +61,10 @@ class BaseModel(ABC):
             - true_labels: List of true labels
             - num_samples: Number of samples processed
         """
+        logger.info(f"Starting dataset prediction with {max_samples or 'all'} samples")
+        logger.debug(
+            f"Using text_column: {text_column}, label_column: {label_column}, eval_split: {eval_split}"
+        )
 
         results = []
         predictions = []
@@ -66,14 +74,18 @@ class BaseModel(ABC):
             # Handle DatasetDict
             if isinstance(dataset, DatasetDict):
                 if eval_split not in dataset:
+                    logger.error(f"Split {eval_split} not found in dataset")
                     raise ValueError(f"Split {eval_split} not found in dataset")
                 dataset_data = dataset[eval_split]
+                logger.debug(f"Using split {eval_split} from DatasetDict")
             else:
                 dataset_data = dataset
+                logger.debug("Using single Dataset")
 
             # Limit samples if specified
             if max_samples is not None:
                 dataset_data = dataset_data.select(range(max_samples))
+                logger.debug(f"Limited dataset to {max_samples} samples")
 
             # Process each sample
             for item in tqdm(dataset_data):
@@ -84,21 +96,26 @@ class BaseModel(ABC):
                 label = item.get(label_column, item.get("labels", None))
 
                 if not text:
+                    logger.warning("Skipping empty text sample")
                     continue
 
                 # Get prediction
-                result = self.predict(text, **kwargs)
-                results.append(result)
-
-                # Store prediction and label
-                predictions.append(result.get("prediction"))
-                true_labels.append(label)
+                try:
+                    result = self.predict(text, **kwargs)
+                    results.append(result)
+                    predictions.append(result.get("prediction"))
+                    true_labels.append(label)
+                except Exception as e:
+                    logger.error(f"Error processing sample: {str(e)}")
+                    raise
 
         else:
+            logger.error(f"Unsupported dataset type: {type(dataset)}")
             raise ValueError(
                 f"Dataset type {type(dataset)} not supported. Dataset should be a HuggingFace Dataset or DatasetDict"
             )
 
+        logger.info(f"Completed dataset prediction. Processed {len(results)} samples")
         return {
             "results": results,
             "predictions": predictions,

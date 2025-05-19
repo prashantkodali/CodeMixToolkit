@@ -1,0 +1,52 @@
+# mkdocs.yml
+site_name: CodeMixToolkit
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+    - content.action.edit
+    - content.tooltips
+  palette:
+    # Dark Mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: green
+      accent: deep purple
+
+    # Light Mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: blue
+      accent: deep orange
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_source: true
+            show_submodules: true
+            merge_init_into_class: true  # This ensures __init__ doc is shown under the class
+            separate_signature: true     # Better formatting of parameters
+            group_by_category: true      # Groups attributes, methods, etc.
+  - search  
+
+markdown_extensions:
+  - footnotes  
+
+nav:
+  - index.md
+  - tutorials.md
+  - How-To Guides: how-to-guides.md
+  - reference.md
+  - explanation.md
+
