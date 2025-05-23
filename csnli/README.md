@@ -140,3 +140,110 @@ docker build -t csnli-api .
 - `lm/`: Language models
 - `dicts/`: Dictionary files
 - `csnli-models/`: Additional model files 
+
+
+
+<details>
+<summary><h1>CSNLI API Service</h1></summary>
+
+A FastAPI-based service for language identification and text processing, particularly focused on Hinglish (Hindi-English) text processing.
+
+### CSNLI API Setup
+
+#### Prerequisites
+- Python 3.7+
+- Required Python packages:
+  - fastapi
+  - uvicorn
+  - pydantic
+  - requests (for testing)
+
+#### Installation
+
+1. Install the required packages:
+```bash
+pip install fastapi uvicorn pydantic requests
+```
+
+2. Make sure the model files are in the correct locations:
+   - `lid_models/hinglish`
+   - `nmt_models/rom2hin.pt`
+   - `nmt_models/eng2eng.pt`
+
+### Running the CSNLI Service
+
+#### Development Mode
+```bash
+# Using Python directly
+python csnli_api.py
+```
+
+### CSNLI API Endpoint
+
+#### POST /csnli-lid
+Processes input text for language identification and normalization.
+
+**Request Body:**
+```json
+{
+    "text": "your text here"
+}
+```
+
+**Response:**
+```json
+{
+    "csnli_op": {
+        "og_text": "original text",
+        "text": ["processed", "words"],
+        "norm_text": ["normalized", "words"],
+        "lid": ["language", "tags"]
+    }
+}
+```
+
+```
+
+
+### CSNLI API Example Usage
+
+#### Using curl
+```bash
+curl -X POST "http://localhost:6001/csnli-lid" \
+     -H "Content-Type: application/json" \
+     -d '{"text": "i thght mosam dfrnt hoga bs fog h"}'
+```
+
+The test script includes several test cases:
+- Hinglish text
+- Pure Hindi text
+- Pure English text
+- Mixed Hindi-English text
+- Another Hinglish example
+
+
+#### Using Python
+```python
+import requests
+
+url = "http://localhost:6001/csnli-lid"
+headers = {"Content-Type": "application/json"}
+data = {"text": "your text here"}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+### CSNLI API Error Handling
+
+The API handles various error cases:
+- Invalid input format
+- Processing errors
+- Server errors
+
+All errors are returned with appropriate HTTP status codes and error messages.
+
+### Contributing
+
+Feel free to submit issues and enhancement requests.
+</details>
