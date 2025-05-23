@@ -11,7 +11,7 @@ docker pull prakod/gcm-codemix-generator
 
 ### Run the Docker Container
 ```bash
-docker run -p 5000:5000 -p 6000:6000 -d prakod/codemix-gcm-generator
+docker run -p 5001:5000 -p 6001:6000 -d prakod/gcm-codemix-generator
 ```
 
 This will create a container based on the Docker image. Get the ID of the container using:
@@ -27,7 +27,6 @@ docker exec -it <container_id> bash
 Once inside the container:
 ```bash
 conda activate gcm-venv
-git clone https://github.com/prashantkodali/CodeMixToolkit.git
 ```
 
 ## Running Services
@@ -45,15 +44,14 @@ export FLASK_APP=gcmgenerator
 flask run -h 0.0.0.0 -p 6000
 ```
 
-The API service will now be accessible from your host machine.
+The API service will now be accessible from your host machine - these APIs can now be accessed in your host.
 
-## Example Usage
+- Ensure you are in the "library" folder
 
-To use the GCM APIs from the docker image, you can find examples in the [GCM Generator API Demo.ipynb](../GCM Generator API Demo.ipynb) notebook. Run the cells to see the functionality of the API.
+- To use the GCM APIs from the docker image, you can find examples in [ExampleNotebook.ipynb](../examples/ExampleNotebook.ipynb) notebook and run the cells to see the functionality of the API.
 
-## Ports
-- Port 5000: Jupyter Notebook
-- Port 6000: Flask API
+- You can change the ports but the example demostrations work with the default ports - if you change ports please edit the usage example suitably.
+
 
 ## Troubleshooting
 
@@ -66,52 +64,3 @@ To use the GCM APIs from the docker image, you can find examples in the [GCM Gen
    - Ensure port 6000 is available
    - Check if you're in the correct directory when running the Flask commands 
 
-
-
-   ## CODE-MIX GENERATOR - MODIFIED DOCKER IMAGE
-
-- This modified docker image contains API calls to utilise the aligner and codemix-generator functionalities in a simple manner.
-
-### Pull docker image
-
-- Link to docker hub: https://hub.docker.com/r/prakod/gcm-codemix-generator
-- Alternatively, use the command 
-```
-docker pull prakod/gcm-codemix-generator
-```
-
-### Instructions to run the docker image (after pulling docker image)
-```
-docker run -p 5000:5000 -p 6000:6000 -d prakod/codemix-gcm-generator (this can alternatively be done using Docker desktop)
-```
-- This will create a container based on the Docker image. Get the ID of the container (using the Desktop app or `docker ps`)
-- Then run:
-```
-docker exec -it <container_id> bash
-```
-- This will create a bash terminal for you to perform operations on the container.
-```
-conda activate gcm-venv
-git clone https://github.com/prashantkodali/CodeMixToolkit.git
-```
-
-### Running jupyter notebook
-
-```
-jupyter notebook --ip 0.0.0.0 --port 5000 --no-browser --allow-root
-```
-
-### Instructions to run the flask API: 
-
-- Ensure you are in the "library" folder
-
-- Run these commands:
- ```
- >>> export FLASK_APP=gcmgenerator
- >>> flask run -h 0.0.0.0 -p 6000
- ```
-- (change port and host details as required)
-
-- This command runs the API service in the docker image - these APIs can now be accessed in your host.
-
-- To use the GCM APIs from the docker image, you can find examples in [GCM Generator API Demo.ipynb](GCM Generator API Demo.ipynb) notebook and run the cells to see the functionality of the API.
