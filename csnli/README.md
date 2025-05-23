@@ -2,17 +2,21 @@
 
 This repository contains a Docker setup for the CSNLI (Code-Switched Natural Language Identification) API.
 
+## Quick Start
 
-## Running the Container
+### Pull the Docker Image
+```bash
+docker pull prakod/csnli-api
+```
 
 ### Run in Background (Recommended)
 ```bash
-docker run -d -p 6000:6000 csnli-api
+docker run -d -p 6000:6000 prakod/csnli-api
 ```
 
 ### Run in Foreground (for debugging)
 ```bash
-docker run -p 6000:6000 csnli-api
+docker run -p 6000:6000 prakod/csnli-api
 ```
 
 ## Managing the Container
@@ -43,9 +47,27 @@ Once the container is running, you can test the API using curl:
 
 ```bash
 curl -X POST "http://localhost:6000/csnli-lid" \
-     -H "Content-Type: application/json" \
-     -d '{"text": "namaste world"}'
+    -H "Content-Type: application/json" \
+    -d '{"text": "i thght mosam dfrnt hoga bs fog h"}'
 ```
+
+Expected output:
+```json
+{
+    "csnli_op": {
+        "text_str": "i thght mosam dfrnt hoga bs fog h",
+        "text_tokenized": ["i", "thght", "mosam", "dfrnt", "hoga", "bs", "fog", "h"],
+        "norm_text": ["i", "thought", "मौसम", "different", "होगा", "बस", "fog", "है"],
+        "lid": ["en", "en", "hi", "en", "hi", "hi", "en", "hi"]
+    }
+}
+```
+
+The output shows:
+- `text_str`: Original input text
+- `text_tokenized`: Words split into tokens
+- `norm_text`: Normalized text with proper spelling and script
+- `lid`: Language identification tags (en=English, hi=Hindi)
 
 ## API Endpoints
 
@@ -77,7 +99,9 @@ Processes input text for language identification and normalization.
 - Docker installed on your system
 - Python 3.7 (for local development/testing)
 
-## Building the Docker Image
+## Building the Docker Image (Optional)
+
+If you want to build the image locally instead of pulling from Docker Hub:
 
 1. First, generate the requirements file from the conda environment:
 ```bash
