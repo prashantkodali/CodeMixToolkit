@@ -1,164 +1,134 @@
-# CodeMixToolkit
-Languages: Hindi, English
+# <div align="center">CodeMixToolkit</div>
 
+<div align="center">
 
-Install Instructions:
-1. Download the dist directory
-2. Do pip install 'location of dist'
-3. You can import codemix in your code now
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=flat&logo=docker&logoColor=white)
+![Python](https://img.shields.io/badge/Python-Supported-3776AB?style=flat&logo=python&logoColor=white)
+<!-- ![Languages](https://img.shields.io/badge/Languages-Hindi%2C%20English-blue) -->
 
-### Recommended
-- Run the toolkit in an Anaconda environment.
+</div>
 
-## CODE-MIX GENERATOR - MODIFIED DOCKER IMAGE
+## 📚 Table of Contents
+- [Overview](#overview)
+  - [Core Modules](#core-modules)
+  - [Key Features](#key-features)
+- [Installation](#installation)
+  - [Development Installation](#development-installation)
+- [Usage and Supported Tools](#usage-and-supported-tools)
+  - [Examples](#examples)
+  - [GCM Toolkit](#1-gcm-toolkit)
+  - [CSNLI Tool](#2-csnli-tool)
+- [Development and Contributing](#development-and-contributing)
+  - [Environment Setup](#environment-setup)
+  - [Development Workflow](#development-workflow)
+- [License](#license)
 
-- This modified docker image contains API calls to utilise the aligner and codemix-generator functionalities in a simple manner.
+## Overview
+CodeMixToolkit is a comprehensive toolkit for processing code-mixed text, currently supporting both Hindi and English languages. It provides a suite of tools and utilities for various aspects of code-mixed text processing, from data generation to analysis.
 
-### Pull docker image
+### Core Modules
 
-- Link to docker hub: https://hub.docker.com/r/prakod/gcm-codemix-generator
-- Alternatively, use the command 
-```
-docker pull prakod/gcm-codemix-generator
-```
+#### 1. Data Processing (`data/`)
+- Utilities for handling code-mixed text data
+- Data loading and ready access to datasets
 
-### Instructions to run the docker image (after pulling docker image)
-```
-docker run -p 5000:5000 -p 6000:6000 -d prakod/codemix-gcm-generator (this can alternatively be done using Docker desktop)
-```
-- This will create a container based on the Docker image. Get the ID of the container (using the Desktop app or `docker ps`)
-- Then run:
-```
-docker exec -it <container_id> bash
-```
-- This will create a bash terminal for you to perform operations on the container.
-```
-conda activate gcm-venv
+#### 2. Models (`models/`)
+- Implementation of various models for code-mixed text processing
+- Pre-trained model interfaces for inference using the models
+- Zero and Few-shot prompting of LLMs
+
+#### 3. Training (`train/`)
+- Training scripts and utilities
+- Model training pipelines
+
+#### 4. Evaluation (`evaluation/`)
+- Evaluation setup for model checkpoints and LLMS
+
+#### 5. Utilities (`utils/`)
+- Common utility functions
+- Text processing helpers
+- Configuration management
+
+### Key Features
+- Access to code-mixed datasets
+- Language identification and normalization
+- Synthetic data generation capabilities
+- Model training and evaluation pipelines
+- Docker-based access to popular tools for ease of usage
+- Comprehensive API for integration
+- Easily extendable
+
+## Installation
+
+### Installation
+You can install directly from PyPI (coming soon):
+
+<!-- ```bash
+pip install codemix
+``` -->
+
+### Development Installation
+For development purposes, you can create an editable install:
+
+```bash
+# Clone the repository
 git clone https://github.com/prashantkodali/CodeMixToolkit.git
+cd CodeMixToolkit
+
+# Create an editable install
+pip install -e .
 ```
 
-### Running jupyter notebook
+This will allow you to modify the library code and see changes immediately without reinstalling.
 
-```
-jupyter notebook --ip 0.0.0.0 --port 5000 --no-browser --allow-root
-```
+## Usage and Supported Tools
 
-### Instructions to run the flask API: 
+### Examples
+Check out our [Example Notebook](examples/ExampleNotebook.ipynb) for hands-on examples of how to use the toolkit.
 
-- Ensure you are in the "library" folder
+Additionally, there are some previously publicly released tools that we have found useful in our work. To reduce the setup overhead, we have created docker images which expose simple APIs enabling users to leverage these tools quickly.
 
-- Run these commands:
- ```
- >>> export FLASK_APP=gcmgenerator
- >>> flask run -h 0.0.0.0 -p 6000
- ```
-- (change port and host details as required)
+### 1. GCM Toolkit
+A powerful tool for generating synthetic code-mixed data.
 
-- This command runs the API service in the docker image - these APIs can now be accessed in your host.
+- **Docker Hub**: [prakod/gcm-codemix-generator](https://hub.docker.com/r/prakod/gcm-codemix-generator)
+- **Documentation**: [GCM README](gcm/README.md)
 
-- To use the GCM APIs from the docker image, you can find examples in [GCM Generator API Demo.ipynb](GCM Generator API Demo.ipynb) notebook and run the cells to see the functionality of the API.
+### 2. CSNLI Tool
+Specialized tool for language identification and normalization of code-mixed sentences.
 
-<details>
-<summary><h1>CSNLI API Service</h1></summary>
+- **Docker Hub**: [prakod/csnli-api](https://hub.docker.com/r/prakod/csnli-api)
+- **Documentation**: [CSNLI README](csnli/README.md)
 
-A FastAPI-based service for language identification and text processing, particularly focused on Hinglish (Hindi-English) text processing.
+## Development and Contributing
 
-### CSNLI API Setup
+We welcome contributions to the CodeMixToolkit! Here's how you can get started:
 
-#### Prerequisites
-- Python 3.7+
-- Required Python packages:
-  - fastapi
-  - uvicorn
-  - pydantic
-  - requests (for testing)
+### Environment Setup
+We recommend using Conda for development. A `conda_env.yaml` file is provided for easy environment setup:
 
-#### Installation
-
-1. Install the required packages:
 ```bash
-pip install fastapi uvicorn pydantic requests
+conda env create -f conda_env.yaml
+conda activate codemix
 ```
 
-2. Make sure the model files are in the correct locations:
-   - `lid_models/hinglish`
-   - `nmt_models/rom2hin.pt`
-   - `nmt_models/eng2eng.pt`
+### Development Workflow
+1. Fork the repository
+2. Create a new branch for your feature
+3. Set up pre-commit hooks for code quality:
+   ```bash
+   pre-commit install
+   ```
+4. Make your changes following our code style:
+   - [Ruff](https://github.com/astral-sh/ruff) for linting and formatting
+   - [Pre-commit](https://pre-commit.com/) for pre-commit hooks
+5. Run tests and ensure they pass
+6. Submit a pull request
 
-### Running the CSNLI Service
+For major changes, please open an issue first to discuss what you would like to change.
 
-#### Development Mode
-```bash
-# Using Python directly
-python csnli_api.py
-```
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### CSNLI API Endpoint
+---
 
-#### POST /csnli-lid
-Processes input text for language identification and normalization.
-
-**Request Body:**
-```json
-{
-    "text": "your text here"
-}
-```
-
-**Response:**
-```json
-{
-    "csnli_op": {
-        "og_text": "original text",
-        "text": ["processed", "words"],
-        "norm_text": ["normalized", "words"],
-        "lid": ["language", "tags"]
-    }
-}
-```
-
-```
-
-
-### CSNLI API Example Usage
-
-#### Using curl
-```bash
-curl -X POST "http://localhost:6001/csnli-lid" \
-     -H "Content-Type: application/json" \
-     -d '{"text": "i thght mosam dfrnt hoga bs fog h"}'
-```
-
-The test script includes several test cases:
-- Hinglish text
-- Pure Hindi text
-- Pure English text
-- Mixed Hindi-English text
-- Another Hinglish example
-
-
-#### Using Python
-```python
-import requests
-
-url = "http://localhost:6001/csnli-lid"
-headers = {"Content-Type": "application/json"}
-data = {"text": "your text here"}
-
-response = requests.post(url, headers=headers, json=data)
-print(response.json())
-```
-
-### CSNLI API Error Handling
-
-The API handles various error cases:
-- Invalid input format
-- Processing errors
-- Server errors
-
-All errors are returned with appropriate HTTP status codes and error messages.
-
-### Contributing
-
-Feel free to submit issues and enhancement requests.
-</details>

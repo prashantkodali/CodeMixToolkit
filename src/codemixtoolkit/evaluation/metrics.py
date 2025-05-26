@@ -4,7 +4,7 @@ Metrics module for evaluation.
 
 from typing import Any, Dict, List, Optional, Union
 import numpy as np
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from sacrebleu.metrics import BLEU, CHRF
 
 
@@ -25,10 +25,12 @@ class EvaluationMetrics:
             average: Averaging strategy for F1 score (default: weighted)
 
         Returns:
-            Dictionary containing accuracy and F1 score
+            Dictionary containing accuracy, precision, recall and F1 score
         """
         return {
             "accuracy": accuracy_score(references, predictions),
+            "precision": precision_score(references, predictions, average=average),
+            "recall": recall_score(references, predictions, average=average),
             "f1": f1_score(references, predictions, average=average),
         }
 

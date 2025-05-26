@@ -158,6 +158,58 @@ class HateSpeechEnHiBohraEtAl(HFDatasetsReader):
         )
 
 
+# pun classification - https://github.com/Likhith-Asapu/Codemix-Pun-Generation/tree/main
+
+# sarcasam
+
+# humour
+
+# pretraining corpus - acl paper
+
+# l3cube
+
+
+# # [Data Efficiency Commands](data_efficiency_ft/README.md)
+
+
+# # Dataset Names/Paths
+# - En-Hi
+#     - Sentiment
+#         - subword : prakod/subwordlstm_sentiment
+#         - gluecos : prakod/gluecos_sentiment_enhi_with_testset || prakod/gluecos_sentiment
+#         - sentimix : prakod/sentimix_semeval
+#     - QA: prakod/gluecos_qa_enhi
+#     - NLI: prakod/gluecos_nli_enhi
+#     - Hate: prakod/hate_speech_enhi_bohraetal
+
+# - En-Es
+#     - Sentiment :
+#         - Gluecos : prakod/sentiment_gluecos_enes_with_test_split
+#         - Sentimix : prakod/sentimix_semeval_enes_with_test_split || prakod/sentiment_gluecos_enes
+
+
+# - En-Ta
+#     - Sentiment: prakod/sentiment_fire_enta
+#     - Hate/Offense: prakod/offenseval_dravidian_tamil_binary
+
+# - En-Ml
+#     - Sentiment: prakod/sentiment_fire_enma
+#     - Hate/Offense: prakod/offenseval_dravidian_malayalam_binary
+
+# - En-Kn
+#     - Hate/Offense: prakod/offenseval_dravidian_kannada_binary
+
+# - En-Te
+#     - Sentiment: prakod/sentiment_ente
+#     - Hate/Offense: prakod/hate_ente
+
+
+# # Model IDs
+# - XLMR - FacebookAI/xlm-roberta-base
+# - mbart - facebook/mbart-large-cc25
+# - llama 1b - meta-llama/Llama-3.2-1B
+
+
 # Sentiment Analysis Datasets
 # @register_dataset
 # class HateSpeechHIDataset(HFDatasetsReader):
